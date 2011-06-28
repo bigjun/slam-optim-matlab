@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of addLandmark</title>
+  <meta name="keywords" content="addLandmark">
+  <meta name="description" content="Config=addPose(factorR,Config)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html Config -->
+<h1>addLandmark
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Config=addPose(factorR,Config)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function Config=addLandmark(factorR,Config) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Config=addPose(factorR,Config)
+ The script adds a new landmark to the current Config
+ Author: Viorela Ila</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../FunctionsAndJacobians/RelativePoint2AbsolutePoint.html" class="code" title="function pWorld=RelativePoint2AbsolutePoint(P1,pRel)">RelativePoint2AbsolutePoint</a>	Applies a relative displacement to a pose in world coordinates.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="addFactor.html" class="code" title="function [Config, System, Graph]=addFactor( factorR,Config, System, Graph)">addFactor</a>	[Config, System, Graph]=addFactor( factorR,Config, System, Graph)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Config=addLandmark(factorR,Config)</a>
+0002 
+0003 <span class="comment">% Config=addPose(factorR,Config)</span>
+0004 <span class="comment">% The script adds a new landmark to the current Config</span>
+0005 <span class="comment">% Author: Viorela Ila</span>
+0006 
+0007 s1=factorR(2); <span class="comment">% pose in the config</span>
+0008 s2=factorR(1); <span class="comment">% new landmark</span>
+0009 r=factorR(3);
+0010 b=factorR(4);
+0011 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim];
+0012 
+0013 P1=Config.vector(ndx1,1);
+0014 pRel=[r*cos(b);r*sin(b)];
+0015 pWorld=<a href="../FunctionsAndJacobians/RelativePoint2AbsolutePoint.html" class="code" title="function pWorld=RelativePoint2AbsolutePoint(P1,pRel)">RelativePoint2AbsolutePoint</a>(P1,pRel);
+0016 
+0017 <span class="comment">% update Config</span>
+0018 Config.vector=[Config.vector;[pWorld,[0,0]']];
+0019 Config.size=size(Config.vector,1);
+0020 Config.ndx=Config.ndx+1;
+0021 Config.nLands=Config.nLands+1;
+0022 Config.id2config((s2+1),:)=[Config.nPoses,Config.nLands];
+0023 
+0024</pre></div>
+<hr><address>Generated on Wed 11-May-2011 19:51:36 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

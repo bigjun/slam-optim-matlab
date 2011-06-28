@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cut2maxID</title>
+  <meta name="keywords" content="cut2maxID">
+  <meta name="description" content="cuts the graph to maxID and add some new set of indexes">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Utils --><!-- menu.html Dataset -->
+<h1>cut2maxID
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>cuts the graph to maxID and add some new set of indexes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [vert, ed]=cut2maxID(maxID,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> cuts the graph to maxID and add some new set of indexes</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Tests/testNonlinearOptimization.html" class="code" title="function testNonlinearOptimization">testNonlinearOptimization</a>	testNonlinearOptimization</li><li><a href="saveDataFileMat.html" class="code" title="function [G,A,b,ed,config]=saveDataFileMat(dataFileMat,dataSet,maxID,dim,weights_mode)">saveDataFileMat</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [vert, ed]=cut2maxID(maxID,varargin)</a>
+0002 <span class="comment">% cuts the graph to maxID and add some new set of indexes</span>
+0003 
+0004 <span class="comment">% load graph from file</span>
+0005 <span class="keyword">if</span> ischar(varargin{1})
+0006     dataFile=varargin{1};
+0007     <span class="keyword">if</span> maxID
+0008         graphFileMat=cat(2,dataFile,<span class="string">'graph'</span>,num2str(maxID),<span class="string">'.mat'</span>);
+0009     <span class="keyword">else</span>
+0010         graphFileMat=cat(2,dataFile,<span class="string">'graph'</span>,<span class="string">'.mat'</span>);
+0011     <span class="keyword">end</span>
+0012     <span class="comment">% read the file</span>
+0013     <span class="keyword">if</span> exist(graphFileMat,<span class="string">'file'</span>)
+0014         load(graphFileMat);
+0015         disp(<span class="string">'Loading variables from file ...'</span>)
+0016     <span class="keyword">else</span>
+0017         error(<span class="string">'No such file or directory'</span>);
+0018     <span class="keyword">end</span>
+0019 <span class="keyword">else</span>
+0020     vertices=varargin{1};
+0021     edges=varargin{2};
+0022 <span class="keyword">end</span>
+0023 
+0024 nv = size(vertices,1);
+0025 <span class="keyword">if</span> (maxID==0) || (maxID&gt;nv)
+0026     maxID = nv;
+0027 <span class="keyword">end</span>
+0028 
+0029 [srtVert,order] = sort(vertices(1:maxID),<span class="string">'ascend'</span>);
+0030 goodIndices = ismember(edges(:,1),srtVert)&amp;ismember(edges(:,2),srtVert); <span class="comment">% +1 needed because old labels start at 0</span>
+0031 ed = edges(goodIndices,:);
+0032 vert=vertices(order,:);
+0033 
+0034 <span class="comment">% %map to new labels</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% maxLabel = srtVert(maxID); %</span>
+0037 <span class="comment">% invVert = spalloc(maxLabel+1,1, maxID);</span>
+0038 <span class="comment">% invVert(srtVert+1) = order;</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% goodIndices = ismember(edges(:,1),srtVert)&amp;ismember(edges(:,2),srtVert); % +1 needed because old labels start at 0</span>
+0041 <span class="comment">% ed = [invVert(edges(goodIndices,1)+1), ...</span>
+0042 <span class="comment">%     invVert(edges(goodIndices,2)+1), ...</span>
+0043 <span class="comment">%     edges(goodIndices,:)];</span>
+0044 <span class="comment">% vert=[invVert(srtVert+1),vertices(order,:)];</span>
+0045</pre></div>
+<hr><address>Generated on Wed 11-May-2011 19:51:36 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

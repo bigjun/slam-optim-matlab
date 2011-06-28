@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Absolute2RelativeJacobian</title>
+  <meta name="keywords" content="Absolute2RelativeJacobian">
+  <meta name="description" content="Jacobian of the relative displacement between two poses.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html FunctionsAndJacobians -->
+<h1>Absolute2RelativeJacobian
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Jacobian of the relative displacement between two poses.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [H1 H2]=Absolute2RelativeJacobian(p1,p2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Jacobian of the relative displacement between two poses.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../System/addFactorPose.html" class="code" title="function System=addFactorPose(factorR,Config,System)">addFactorPose</a>	Config=addPose(factorR,Config)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [H1 H2]=Absolute2RelativeJacobian(p1,p2)</a>
+0002 
+0003 <span class="comment">% Jacobian of the relative displacement between two poses.</span>
+0004 
+0005 dx=(p2(1)-p1(1));
+0006 dy=(p2(2)-p1(2));
+0007 
+0008 c1=cos(p1(3));
+0009 s1=sin(p1(3));
+0010 
+0011 H1=[[-c1 -s1 -s1*dx+c1*dy ];
+0012     [ s1 -c1 -c1*dx-s1*dy ];
+0013     [  0   0    -1        ]];
+0014 
+0015 H2=[[ c1  s1 0];
+0016     [-s1  c1 0];
+0017     [  0   0 1]];
+0018 
+0019 <span class="comment">%H2=eye(3); % gtsam implementation</span>
+0020</pre></div>
+<hr><address>Generated on Wed 11-May-2011 19:51:36 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

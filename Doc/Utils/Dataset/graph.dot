@@ -1,0 +1,11 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  loadDataSet -> loadFromFile;
+  saveDataFileMat -> cut2maxID;
+  saveDataFileMat -> loadDataSet;
+
+  cut2maxID [URL="cut2maxID.html"];
+  loadDataSet [URL="loadDataSet.html"];
+  loadFromFile [URL="loadFromFile.html"];
+  saveDataFileMat [URL="saveDataFileMat.html"];
+}

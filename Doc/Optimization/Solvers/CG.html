@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of CG</title>
+  <meta name="keywords" content="CG">
+  <meta name="description" content="Least Squares Conjugate Gradient">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Optimization --><!-- menu.html Solvers -->
+<h1>CG
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Least Squares Conjugate Gradient</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [x, info,res_v,error_v]=CG(A,b,maxIT,epsilon,initialization,plot_residual,mu) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Least Squares Conjugate Gradient</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <a name="_sub0" href="#_subfunctions" class="code">function [x, info,res_v,error_v]=CG(A,b,maxIT,epsilon,initialization,plot_residual,mu)</a>
+0003 
+0004 <span class="comment">% Least Squares Conjugate Gradient</span>
+0005 
+0006 n= size(A,2);
+0007 <span class="keyword">if</span> (nargin &lt; 2)
+0008     error(<span class="string">'Not enough input arguments.'</span>);
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="keyword">if</span> (nargin &lt; 3)
+0012     maxIT=n;
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="keyword">if</span> (nargin &lt; 4)
+0016     epsilon=0.01;
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="keyword">if</span> (nargin &lt; 5)
+0020     initialization=zeros(n,1);
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="keyword">if</span> (nargin &lt; 6)
+0024     plot_residual=0;
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="keyword">if</span> (nargin &lt; 7)
+0028     <span class="keyword">if</span> plot_residual
+0029         error(<span class="string">'Error computation requires the mean'</span>);
+0030     <span class="keyword">else</span>
+0031         mu=0;
+0032     <span class="keyword">end</span>
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0036 <span class="comment">%initialization</span>
+0037 
+0038 <span class="keyword">if</span> plot_residual
+0039     ck=cputime;
+0040     x=initialization;
+0041     g=-((b-A*x)'*A)';
+0042     d=-g;
+0043     it=1;
+0044     gamma=g'*g;
+0045     threshold=epsilon^2*gamma ;
+0046     timeInit=(cputime-ck);
+0047 <span class="keyword">else</span>
+0048     ck=cputime;
+0049     x=initialization;
+0050     g=-(b'*A)';
+0051     d=-g;
+0052     it=1;
+0053     gamma=g'*g;
+0054     threshold=epsilon^2*gamma ;
+0055     timeInit=(cputime-ck);
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">% needed to compute residual and error</span>
+0059 nb=norm(b);
+0060 <span class="keyword">if</span> plot_residual
+0061     res_v=zeros(maxIT,1);
+0062     error_v=zeros(maxIT,1);
+0063     res_v(it)=norm(b-A*x)/nb;
+0064     error_v(it)=(x-mu)'*(A'*(A*(x-mu)));
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0068 <span class="comment">% iterations</span>
+0069 done=false;
+0070 timeIterations=0;
+0071 <span class="keyword">while</span>  ~done
+0072     ck=cputime;
+0073     <span class="comment">%calculate step size and take optimal step</span>
+0074     Ad=A*d; 
+0075     <span class="comment">%alpha=-(d'*g)/(Ad'*Ad);</span>
+0076     alpha=gamma/(Ad'*Ad);
+0077     x=x+alpha*d;
+0078     
+0079     <span class="comment">%update gradient</span>
+0080     g=g+alpha*(Ad'*A)';
+0081     new_gamma=g'*g;
+0082     
+0083     <span class="comment">%stop condition</span>
+0084     done=((new_gamma&lt;threshold)||(it &gt;=maxIT));
+0085     
+0086     <span class="comment">%calculate new search direction</span>
+0087     beta=new_gamma/gamma;
+0088     d=-g+beta*d;
+0089     
+0090     <span class="comment">% prepare for next iteration</span>
+0091     gamma=new_gamma;
+0092     timeIterations=timeIterations+(cputime-ck);
+0093     it=it+1;
+0094     
+0095     <span class="keyword">if</span> plot_residual
+0096         res_v(it)=norm(b-A*x)/nb;
+0097         error_v(it)=(x-mu)'*(A'*(A*(x-mu)));
+0098     <span class="keyword">end</span>
+0099 <span class="keyword">end</span>
+0100 
+0101 
+0102 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0103 <span class="comment">%solution + residual + error</span>
+0104 <span class="comment">%These two are the same x=R1\(y+Q1'* b1) and x=R1\(y+R1*xbar);</span>
+0105 
+0106 <span class="keyword">if</span> plot_residual
+0107     res_v=res_v(1:it);
+0108     info.res=res_v(it);
+0109     error_v=error_v(1:it);
+0110     info.error=error_v(it);
+0111 <span class="keyword">else</span>
+0112     info.res=norm(b-A*x)/nb;
+0113     <span class="comment">% if not plot_residual</span>
+0114     res_v=[];
+0115     error_v=[];
+0116 <span class="keyword">end</span>
+0117 
+0118 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0119 <span class="comment">% info</span>
+0120 info.timeInit=timeInit;
+0121 info.timeIterations=timeIterations;
+0122 info.time=timeInit + timeIterations;
+0123 info.it=it;
+0124</pre></div>
+<hr><address>Generated on Wed 11-May-2011 19:51:36 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

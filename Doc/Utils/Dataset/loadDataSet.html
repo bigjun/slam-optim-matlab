@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of loadDataSet</title>
+  <meta name="keywords" content="loadDataSet">
+  <meta name="description" content="[vertices,edges, dataFile]=loadDataSet(dataSet,saveFile)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- # Utils --><!-- menu.html Dataset -->
+<h1>loadDataSet
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[vertices,edges, dataFile]=loadDataSet(dataSet,saveFile)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [vertices,edges, dataFile]=loadDataSet(dataSet,saveFile) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [vertices,edges, dataFile]=loadDataSet(dataSet,saveFile)
+ The script the function loads the data from file (graph format)
+ Returns the vertices, edges and dataFile name
+ Author: Viorela Ila</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="loadFromFile.html" class="code" title="function [vertices, edges]=loadFromFile(dataFileGraph)">loadFromFile</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../Tests/testNonlinearOptimization.html" class="code" title="function testNonlinearOptimization">testNonlinearOptimization</a>	testNonlinearOptimization</li><li><a href="saveDataFileMat.html" class="code" title="function [G,A,b,ed,config]=saveDataFileMat(dataFileMat,dataSet,maxID,dim,weights_mode)">saveDataFileMat</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [vertices,edges, dataFile]=loadDataSet(dataSet,saveFile)</a>
+0002 
+0003 <span class="comment">% [vertices,edges, dataFile]=loadDataSet(dataSet,saveFile)</span>
+0004 <span class="comment">% The script the function loads the data from file (graph format)</span>
+0005 <span class="comment">% Returns the vertices, edges and dataFile name</span>
+0006 <span class="comment">% Author: Viorela Ila</span>
+0007 
+0008 <span class="keyword">switch</span> dataSet
+0009     <span class="keyword">case</span> <span class="string">'intel'</span>
+0010         dataFileGraph = <span class="string">'./Data/intel.graph'</span>;
+0011     <span class="keyword">case</span> <span class="string">'Killian'</span>
+0012         dataFileGraph =<span class="string">'./Data/Killian.graph'</span>;
+0013     <span class="keyword">case</span> <span class="string">'10K'</span>
+0014         dataFileGraph = <span class="string">'./Data/10K.graph'</span>;
+0015     <span class="keyword">case</span> <span class="string">'10KHOGMan'</span>
+0016         dataFileGraph = <span class="string">'./Data/10KHOGMan.graph'</span>;
+0017     <span class="keyword">case</span> <span class="string">'VP'</span>
+0018         dataFileGraph = <span class="string">'./Data/VP.graph'</span>;
+0019     <span class="keyword">otherwise</span>
+0020         error(<span class="string">'Dataset does not exist!'</span>);
+0021 <span class="keyword">end</span>
+0022 
+0023 dataFileMat=cat(2,dataFileGraph(1:end-6),<span class="string">'.mat'</span>);
+0024 
+0025 <span class="comment">%make sure that there are no other variables called vertices, edges</span>
+0026 clear vertices;
+0027 clear edges;
+0028 
+0029 
+0030 <span class="comment">% read the file</span>
+0031 <span class="keyword">if</span> exist(dataFileMat,<span class="string">'file'</span>)    
+0032     disp(<span class="string">'Loading ed, ver from .MAT file ...'</span>)
+0033     load(dataFileMat);
+0034 <span class="keyword">else</span>
+0035     disp(<span class="string">'Loading ed, ver from .GRAPH file ...'</span>)
+0036     [vertices, edges]=<a href="loadFromFile.html" class="code" title="function [vertices, edges]=loadFromFile(dataFileGraph)">loadFromFile</a>(dataFileGraph);
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="comment">%save data to a mat file</span>
+0040 <span class="keyword">if</span> saveFile
+0041     save(dataFileMat,<span class="string">'vertices'</span>,<span class="string">'edges'</span>);
+0042 <span class="keyword">end</span>
+0043 dataFile=dataFileGraph(1:end-6);</pre></div>
+<hr><address>Generated on Wed 11-May-2011 19:51:36 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

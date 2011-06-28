@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of AbsolutePoint2RBObsJacobian</title>
+  <meta name="keywords" content="AbsolutePoint2RBObsJacobian">
+  <meta name="description" content="Jacobian of the relative range-and-bearing from a pose to a point.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+  <script type="text/javascript">
+    if (top.frames.length == 0) { top.location = "../index.html"; };
+  </script>
+</head>
+<body>
+<a name="_top"></a>
+<!-- menu.html FunctionsAndJacobians -->
+<h1>AbsolutePoint2RBObsJacobian
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Jacobian of the relative range-and-bearing from a pose to a point.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [H1 H2]=AbsolutePoint2RBObsJacobian(P1,pt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Jacobian of the relative range-and-bearing from a pose to a point.
+
+ Returns the Jacobians of the AbsolutePoint2RBObs function with respect 
+ its parameteres evaluated at P1 and pt.
+
+ See also <a href="AbsolutePoint2RBObs.html" class="code" title="function rb=AbsolutePoint2RBObs(P1,pt)">AbsolutePoint2RBObs</a>.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../System/addFactorLandmark.html" class="code" title="function System=addFactorLandmark(factorR,Config,System)">addFactorLandmark</a>	Config=addPose(factorR,Config)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [H1 H2]=AbsolutePoint2RBObsJacobian(P1,pt)</a>
+0002 <span class="comment">% Jacobian of the relative range-and-bearing from a pose to a point.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Returns the Jacobians of the AbsolutePoint2RBObs function with respect</span>
+0005 <span class="comment">% its parameteres evaluated at P1 and pt.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also AbsolutePoint2RBObs.</span>
+0008 
+0009   v=pt-P1(1:2);
+0010   
+0011   d=norm(v);
+0012   
+0013   H1=[-v(1)/d     -v(2)/d      0 ;
+0014        v(2)/d^2   -v(1)/d^2   -1 ];
+0015     
+0016   H2=[ v(1)/d    v(2)/d ;
+0017       -v(2)/d^2  v(1)/d^2 ];</pre></div>
+<hr><address>Generated on Wed 11-May-2011 19:51:36 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,21 @@
+The SAMToolbox implements the SAM and iSAM metrods from the papers:
+
+Square Root SAM: SLAM via Square Root Information Smoothing, F. Dellaert and M. Kaess, IJRR, 2006
+iSAM: Incremental Smoothing and Mapping, M. Kaess, A. Ranganathan, and F. Dellaert, IEEE TRO, 2008 
+
+The toolbox requires Tim Davis SuiteSparse toolbox which can be downloaded from here: 
+http://www.cise.ufl.edu/research/sparse/SuiteSparse/'
+
+Download and install the toolbox before using the toolbox.
+
+Run startup.m before running any other script from the toolbox.
+
+The dataset must be in .graph format. See examples in ./Data
+
+Run ./Tests/testNonlinearOptimization.m to get familiar with the toolbox.
+Set the flag "incremental" to process the data incremental.
+You can also change the Solver and Plot options. 
+
+For any questions contact: vsila@laas.fr
+
+Enjoy!!!  

@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  nonlinearOptimization -> GaussNewtonOptimization;
+  nonlinearOptimization -> LevenbergMarquardtOptimization;
+
+  GaussNewtonOptimization [URL="GaussNewtonOptimization.html"];
+  LevenbergMarquardtOptimization [URL="LevenbergMarquardtOptimization.html"];
+  nonlinearOptimization [URL="nonlinearOptimization.html"];
+}
