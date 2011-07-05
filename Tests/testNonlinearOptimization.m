@@ -181,23 +181,23 @@ Timing.addFactor=Timing.addFactor/Timing.addFactorCnt;
 
 % Just for Debug%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-switch representation
-    case 'CholFactor'
-        Timing_updateL=Timing.updateL
-        Timing_updateD=Timing.updateD
-    case 'Hessian'
-        Timing_updateLambda=Timing.updateLambda
-        Timing_updateEta=Timing.updateEta
-    case 'Jacobian'
-        Timing_updateA=Timing.updateA
-        Timing_updateB=Timing.updateB
-    otherwise
-        error('This state representation is not implemented');
-end
-
-Timing_linearSolver=Timing.linearSolver
-Timing_linearization=Timing.linearization
-Timing_addFactor=Timing.addFactor
+% switch representation
+%     case 'CholFactor'
+%         Timing_updateL=Timing.updateL
+%         Timing_updateD=Timing.updateD
+%     case 'Hessian'
+%         Timing_updateLambda=Timing.updateLambda
+%         Timing_updateEta=Timing.updateEta
+%     case 'Jacobian'
+%         Timing_updateA=Timing.updateA
+%         Timing_updateB=Timing.updateB
+%     otherwise
+%         error('This state representation is not implemented');
+% end
+% 
+% Timing_linearSolver=Timing.linearSolver
+% Timing_linearization=Timing.linearization
+% Timing_addFactor=Timing.addFactor
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
