@@ -21,24 +21,27 @@ representation='Jacobian';
 
 % Timing
 global Timing
-switch representation
-    case 'CholFactor'
-        Timing.updateL=0;
-        Timing.updateLcnt=1;
-        Timing.updateD=0;
-        Timing.updateDcnt=1;        
-    case 'Hessian'
-        Timing.updateEta=0;
-        Timing.updateEtaCnt=1;
-        Timing.updateLambda=0;
-        Timing.updateLambdaCnt=1;
-    case 'Jacobian'
-        Timing.updateA=0;
-        Timing.updateACnt=1;
-        Timing.updateB=0;
-        Timing.updateBCnt=1;
-    otherwise
-        error('This state representation is not implemented');
+Timing.flag=1;
+if Timing.flag
+    switch representation
+        case 'CholFactor'
+            Timing.updateL=0;
+            Timing.updateLcnt=1;
+            Timing.updateD=0;
+            Timing.updateDcnt=1;
+        case 'Hessian'
+            Timing.updateEta=0;
+            Timing.updateEtaCnt=1;
+            Timing.updateLambda=0;
+            Timing.updateLambdaCnt=1;
+        case 'Jacobian'
+            Timing.updateA=0;
+            Timing.updateACnt=1;
+            Timing.updateB=0;
+            Timing.updateBCnt=1;
+        otherwise
+            error('This state representation is not implemented');
+    end
 end
 
 Timing.nonlinearSolver=0;
@@ -50,8 +53,8 @@ Timing.linearizationCnt=1;
 Timing.addFactor=0;
 Timing.addFactorCnt=1;
 
-
-[vertices,edges]=loadDataSet(dataSet,saveFile);
+pathToolbox='~/LAAS/matlab/slam-optim-matlab'; %TODO automaticaly get the toolbox path
+[vertices,edges]=loadDataSet(dataSet,pathToolbox,saveFile);
 [Data.vert, Data.ed]=cut2maxID(maxID, vertices, edges);
 Data.nVert=size(Data.vert,1);
 Data.nEd=size(Data.ed,1);

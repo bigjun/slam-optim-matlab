@@ -17,8 +17,10 @@ disp('Optimize...');
 
 while ~done
     [dm,time_solve]=SolveSystem(System); 
-    Timing.linearSolver=Timing.linearSolver+time_solve;
-    Timing.linearSolverCnt=Timing.linearSolverCnt+1;
+    if Timing.flag
+        Timing.linearSolver=Timing.linearSolver+time_solve;
+        Timing.linearSolverCnt=Timing.linearSolverCnt+1;
+    end
     %plots
     if Plot.DMV, Config.dmv(i)=norm(dm); end;
     if Plot.Error, Config.all_error(i)= computeError(System,dm); end;
@@ -29,8 +31,10 @@ while ~done
         Config=newConfig2D(Config,dm);
         ck=cputime;
         System=linearSystem(Config,Graph,System);
-        Timing.linearization=Timing.linearization+(cputime-ck);
-        Timing.linearizationCnt=Timing.linearizationCnt+1;
+        if Timing.flag
+            Timing.linearization=Timing.linearization+(cputime-ck);
+            Timing.linearizationCnt=Timing.linearizationCnt+1;
+        end
         i=i+1;     
     end
     fprintf('.');

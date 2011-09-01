@@ -42,7 +42,7 @@ switch factorR.type
             System=addFactorPose(factorR,Config,System);
         end
         Graph.idX= [Graph.idX;factorR.data(1)];
-        Graph.F=[Graph.F;factorR];
+        Graph.F=[Graph.F;factorR.data];
         
     case 'loopClosure'
         if strcmp(System.type,'Hessian')
@@ -52,7 +52,7 @@ switch factorR.type
         else
             System=addFactorPose(factorR,Config,System);
         end
-        Graph.F=[Graph.F;factorR];
+        Graph.F=[Graph.F;factorR.data];
         
     case 'new_landmark'
         Config=addLandmark(factorR,Config);
@@ -64,7 +64,7 @@ switch factorR.type
             System=addFactorLandmark(factorR,Config,System);
         end
         Graph.idX= [Graph.idX;factorR.data(1)];
-        Graph.F=[Graph.F;factorR];
+        Graph.F=[Graph.F;factorR.data];
         
     case 'landmark'
         if strcmp(System.type,'Hessian')
@@ -74,7 +74,7 @@ switch factorR.type
         else
             System=addFactorLandmark(factorR,Config,System);
         end
-        Graph.F=[Graph.F;factorR];
+        Graph.F=[Graph.F;factorR.data];
     otherwise
         error('This type of factor is not handeled ')
 end

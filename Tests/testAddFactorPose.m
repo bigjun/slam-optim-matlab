@@ -1,4 +1,4 @@
-function Result=testNonlinearOptimization
+function Result=testAddFactorPose
 
 % testNonlinearOptimization
 % The script applyes nonlinear optimization to a Graph SLAM problem
@@ -17,8 +17,8 @@ maxID=500; % steps to process, if '0', the whole data is processed
 
 incremental=0; 
 
-
-[vertices,edges]=loadDataSet(dataSet,saveFile);
+pathToolbox='~/LAAS/matlab/slam-optim-matlab'; %TODO automaticaly get the toolbox path
+[vertices,edges]=loadDataSet(dataSet,pathToolbox,saveFile);
 [Data.vert, Data.ed]=cut2maxID(maxID, vertices, edges);
 Data.nVert=size(Data.vert,1);
 Data.nEd=size(Data.ed,1);

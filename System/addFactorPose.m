@@ -38,15 +38,18 @@ System.ndx=System.ndx(end)+1:System.ndx(end)+Config.PoseDim;
 ck=cputime;
 System.A(System.ndx,ndx1)=sparse2(R*H1); % Jacobian matrix
 System.A(System.ndx,ndx2)=sparse2(R*H2);
-Timing.updateA=Timing.updateA+(cputime-ck);
-Timing.updateACnt=Timing.updateACnt+1;
-
+if Timing.flag
+    Timing.updateA=Timing.updateA+(cputime-ck);
+    Timing.updateACnt=Timing.updateACnt+1;
+end
 
 % right hand side
 ck=cputime;
 d=z-h;
 d(end)=pi2pi(d(end));
 System.b(System.ndx)=R*d; % Independent term
-Timing.updateB=Timing.updateB+(cputime-ck);
-Timing.updateBCnt=Timing.updateBCnt+1;
+if Timing.flag
+    Timing.updateB=Timing.updateB+(cputime-ck);
+    Timing.updateBCnt=Timing.updateBCnt+1;
+end
 

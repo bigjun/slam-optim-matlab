@@ -41,9 +41,12 @@ nEdges=size(F,1);
 p1{nEdges} = [];
 p2{nEdges} = [];
 for i=1:nEdges
-    s1=F(i).data(2);
-    s2=F(i).data(1);
-    pl=F(i).data(end);
+    %s1=F(i).data(2);
+    %s2=F(i).data(1);
+    %pl=F(i).data(end);
+    s1=F(i,2);
+    s2=F(i,1);
+    pl=F(i,end);
     if pl==99999
         dim=LandDim;
         ndx1=[PoseDim*id2config((s1+1),1)+LandDim*id2config((s1+1),2)]+[1:dim];

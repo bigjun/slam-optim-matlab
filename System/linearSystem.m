@@ -31,23 +31,29 @@ end
 
 
 for i=1:nObs
-    factorR=Graph.F(i,:);
+    factorR.data=Graph.F(i,:);
     if factorR.data(end)~=99999
         if strcmp(System.type,'Hessian')
             ck=cputime;
             System=addFactorPoseHessian(factorR,Config,System);
-            Timing.addFactor=Timing.addFactor+(cputime-ck);
-            Timing.addFactorCnt=Timing.addFactorCnt+1;
+            if Timing.flag
+                Timing.addFactor=Timing.addFactor+(cputime-ck);
+                Timing.addFactorCnt=Timing.addFactorCnt+1;
+            end
         elseif strcmp(System.type,'CholFactor');
             ck=cputime;
             System=addFactorPoseChol(factorR,Config,System);
-            Timing.addFactor=Timing.addFactor+(cputime-ck);
-            Timing.addFactorCnt=Timing.addFactorCnt+1;
+            if Timing.flag
+                Timing.addFactor=Timing.addFactor+(cputime-ck);
+                Timing.addFactorCnt=Timing.addFactorCnt+1;
+            end
         else
             ck=cputime;
             System=addFactorPose(factorR,Config,System);
-            Timing.addFactor=Timing.addFactor+(cputime-ck);
-            Timing.addFactorCnt=Timing.addFactorCnt+1;
+            if Timing.flag
+                Timing.addFactor=Timing.addFactor+(cputime-ck);
+                Timing.addFactorCnt=Timing.addFactorCnt+1;
+            end
         end
         
     else

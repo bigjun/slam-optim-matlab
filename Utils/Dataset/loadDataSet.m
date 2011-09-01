@@ -1,4 +1,4 @@
-function [vertices,edges, dataFile]=loadDataSet(dataSet,saveFile)
+function [vertices,edges, dataFile]=loadDataSet(dataSet,pathToolbox,saveFile)
 
 % [vertices,edges, dataFile]=loadDataSet(dataSet,saveFile)
 % The script the function loads the data from file (graph format)
@@ -7,15 +7,15 @@ function [vertices,edges, dataFile]=loadDataSet(dataSet,saveFile)
 
 switch dataSet
     case 'intel'
-        dataFileGraph = './Data/intel.graph';
+        dataFileGraph = [pathToolbox,'/Data/intel.graph'];
     case 'Killian'
-        dataFileGraph ='./Data/Killian.graph';
+        dataFileGraph = [pathToolbox,'/Data/Killian.graph'];
     case '10K'
-        dataFileGraph = './Data/10K.graph';
+        dataFileGraph = [pathToolbox,'/Data/10K.graph'];
     case '10KHOGMan'
-        dataFileGraph = './Data/10KHOGMan.graph';
+        dataFileGraph = [pathToolbox,'/Data/10KHOGMan.graph'];
     case 'VP'
-        dataFileGraph = './Data/VP.graph';
+        dataFileGraph = [pathToolbox,'/Data/VP.graph'];
     otherwise
         error('Dataset does not exist!');
 end
