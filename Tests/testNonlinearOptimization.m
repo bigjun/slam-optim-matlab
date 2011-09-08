@@ -11,10 +11,10 @@ function Result=testNonlinearOptimization
 close all;
 clear; 
 
-dataSet='10K';
+dataSet='VP';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
 maxID=500; % steps to process, if '0', the whole data is processed 
-incremental=0; 
+incremental=1; 
 %representation='Hessian';
 representation='Jacobian';
 %representation='CholFactor';
@@ -42,26 +42,21 @@ if Timing.flag
         otherwise
             error('This state representation is not implemented');
     end
+    Timing.nonlinearSolver=0;
+    Timing.nonlinearSolverCnt=1;
+    Timing.linearSolver=0;
+    Timing.linearSolverCnt=1;
+    Timing.linearization=0;
+    Timing.linearizationCnt=1;
+    Timing.addFactor=0;
+    Timing.addFactorCnt=1;
 end
 
-Timing.nonlinearSolver=0;
-Timing.nonlinearSolverCnt=1;
-Timing.linearSolver=0;
-Timing.linearSolverCnt=1;
-Timing.linearization=0;
-Timing.linearizationCnt=1;
-Timing.addFactor=0;
-Timing.addFactorCnt=1;
 
+%DATA
 pathToolbox='~/LAAS/matlab/slam-optim-matlab'; %TODO automaticaly get the toolbox path
-[vertices,edges]=loadDataSet(dataSet,pathToolbox,saveFile);
-[Data.vert, Data.ed]=cut2maxID(maxID, vertices, edges);
-Data.nVert=size(Data.vert,1);
-Data.nEd=size(Data.ed,1);
-Data.name=dataSet;
-Data.dof='2D';
+Data=getData(dataSet,pathToolbox,saveFile,maxID);
 Data.obsType='rb'; % range and bering
-
 
 % PARAMETERS
 
@@ -149,10 +144,8 @@ else
     ind=1;
     while ind<=Data.nEd
         factorR.data=Data.ed(ind,:);
-        factorR.dof=Data.dof;
-        factorR.obsType=Data.obsType; % range and bering
         [Config, System, Graph]=addFactor(factorR,Config, System, Graph);
-        [Config, System]=nonlinearOptimiszation(Config,System,Graph,Solver,Plot); 
+        [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot); 
         ind=ind+1;
         
     end

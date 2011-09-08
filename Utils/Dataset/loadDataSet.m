@@ -16,6 +16,8 @@ switch dataSet
         dataFileGraph = [pathToolbox,'/Data/10KHOGMan.graph'];
     case 'VP'
         dataFileGraph = [pathToolbox,'/Data/VP.graph'];
+    case 'sphere'
+        dataFileGraph = [pathToolbox,'/Data/sphere.graph'];
     otherwise
         error('Dataset does not exist!');
 end

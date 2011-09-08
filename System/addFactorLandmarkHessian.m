@@ -4,9 +4,6 @@ function System=addFactorLandmarkHessian(factorR,Config,System)
 % The script adds a new landmark factor to the current System
 % Author: Viorela Ila
 
-Sz=diag([1/factorR.data(6);1/factorR.data(8)]); % only diag cov.
-R=chol(inv(Sz)); %S^(-1/2)
-
 % The 2 poses linked by the constraint
 s1=factorR.data(2); % robot
 s2=factorR.data(1); % landmark
@@ -23,7 +20,7 @@ pt=Config.vector(ndx2);
 switch factorR.type
     case 'odometric'
         F1=Absolute2RelativeJacobian(P1,z); % Jacobian
-        Q=F1*Sz*F1'; % displacement noise in global coordinates
+        Q=F1*factorR.Sz*F1'; % displacement noise in global coordinates
         iQ=Q\eye(Config.PoseDim);
         
         % right hand term
@@ -40,7 +37,7 @@ switch factorR.type
         
         H(:,ndx1)=H1;
         H(:,ndx2)=H2;
-        iSz=Sz\eye(dim);
+        iSz=factorR.Sz\eye(dim);
         
         % right hand term
         System.eta(System.ndx)=EIF.eta+H'*iR*(d+H*Config.vector(:,1));

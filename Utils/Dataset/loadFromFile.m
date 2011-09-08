@@ -39,6 +39,18 @@ else
                 land=[land,str2num(cell2mat(line{1}(j)))];
             end
             edges=[edges;land];
+        elseif strcmp('VERTEX3',line{1}(1)) || strcmp('VERTEX',line{1}(1))
+            v=[];
+            for j=2:size(line{1},1)
+                v=[v,str2num(cell2mat(line{1}(j)))];
+            end
+            vertices=[vertices;v];
+        elseif strcmp('EDGE3',line{1}(1)) || strcmp('EDGE',line{1}(1))
+            e=[];
+            for j=2:size(line{1},1)
+                e=[e,str2num(cell2mat(line{1}(j)))];
+            end
+            edges=[edges;e];
         end
     end
 end

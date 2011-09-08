@@ -6,8 +6,6 @@ function System=addFactorPoseChol(factorR,Config,System)
 % Author: Viorela Ila
 
 global Timing
-Sz=diag([1/factorR.data(6);1/factorR.data(8);1/factorR.data(9)]); % only diag cov.
-R=chol(inv(Sz)); %S^(-1/2)
 
 % The 2 poses linked by the constraint
 s1=factorR.data(2);
@@ -39,7 +37,7 @@ ndx=1:Config.PoseDim;
 ndxEnd=ndx2-ndx1(1)+1;
 h=Absolute2Relative(p1,p2); % Expectation
 [H1 H2]=Absolute2RelativeJacobian(p1,p2); % Jacobian
-[H,Omega]=computeHOmega(H1,H2,R,Config.PoseDim,ndxEnd(end),ndx,ndxEnd);
+[H,Omega]=computeHOmega(H1,H2,factorR.R,Config.PoseDim,ndxEnd(end),ndx,ndxEnd);
 
 
 % update L
@@ -47,9 +45,10 @@ ck=cputime;
 L22 = System.L(ndx1(1):ndx2(end),ndx1(1):ndx2(end)) ;
 L22_new=(chol(L22*L22'+Omega))';
 System.L(ndx1(1):ndx2(end),ndx1(1):ndx2(end))  = L22_new;
-Timing.updateL=Timing.updateL+(cputime-ck);
-Timing.updateLcnt=Timing.updateLcnt+1;
-
+if Timing.flag
+    Timing.updateL=Timing.updateL+(cputime-ck);
+    Timing.updateLcnt=Timing.updateLcnt+1;
+end 
 % update d
 
 ck=cputime;
@@ -58,6 +57,8 @@ d2 = System.d(ndx1(1):ndx2(end),1);
 dz=z-h;
 dz(end)=pi2pi(dz(end));
 System.d(ndx1(1):ndx2(end),1) = L22_new\(L22*d2+H'*dz);
-Timing.updateD=Timing.updateD+(cputime-ck);
-Timing.updateDcnt=Timing.updateDcnt+1;
+if Timing.flag
+    Timing.updateD=Timing.updateD+(cputime-ck);
+    Timing.updateDcnt=Timing.updateDcnt+1;
+end
 

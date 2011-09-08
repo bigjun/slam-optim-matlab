@@ -6,9 +6,6 @@ function [System]=addFactorPoseHessian(factorR,Config,System)
 % Author: Viorela Ila
 
 global Timing
-Sz=diag([1/factorR.data(6);1/factorR.data(8);1/factorR.data(9)]); % only diag cov.
-R=chol(inv(Sz)); %S^(-1/2)
-
 
 % The 2 poses linked by the constraint
 s1=factorR.data(2);
@@ -40,21 +37,26 @@ ndx=1:Config.PoseDim;
 ndxEnd=ndx2-ndx1(1)+1;
 h=Absolute2Relative(p1,p2); % Expectation
 [H1 H2]=Absolute2RelativeJacobian(p1,p2); % Jacobian
-[H,Omega]=computeHOmega(H1,H2,R,Config.PoseDim,ndxEnd(end),ndx,ndxEnd);
+[H,Omega]=computeHOmega(H1,H2,factorR.R,Config.PoseDim,ndxEnd(end),ndx,ndxEnd);
 
 % right hand term
 ck=cputime;
 d=z-h;
 d(end)=pi2pi(d(end));
 System.eta(ndx1(1):ndx2(end),1)=System.eta(ndx1(1):ndx2(end),1)+full(H'*d);
-Timing.updateEta=Timing.updateEta+(cputime-ck);
-Timing.updateEtaCnt=Timing.updateEtaCnt+1;
+if Timing.flag
+    Timing.updateEta=Timing.updateEta+(cputime-ck);
+    Timing.updateEtaCnt=Timing.updateEtaCnt+1;
+end
 
 % Hessian matrix
 ck=cputime;
 System.Lambda(ndx1(1):ndx2(end),ndx1(1):ndx2(end))=System.Lambda(ndx1(1):ndx2(end),ndx1(1):ndx2(end))+Omega;
-Timing.updateLambda=Timing.updateLambda+(cputime-ck);
-Timing.updateLambdaCnt=Timing.updateLambdaCnt+1;
+
+if Timing.flag
+    Timing.updateLambda=Timing.updateLambda+(cputime-ck);
+    Timing.updateLambdaCnt=Timing.updateLambdaCnt+1;
+end
 
 
 

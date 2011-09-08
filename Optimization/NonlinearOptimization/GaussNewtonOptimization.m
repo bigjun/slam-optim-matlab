@@ -16,7 +16,7 @@ done=(i>=Solver.maxIT);
 disp('Optimize...');
 
 while ~done
-    [dm,time_solve]=SolveSystem(System); 
+    [dm,time_solve]=solveSystem(System); 
     if Timing.flag
         Timing.linearSolver=Timing.linearSolver+time_solve;
         Timing.linearSolverCnt=Timing.linearSolverCnt+1;

@@ -4,8 +4,6 @@ function System=addFactorLandmark(factorR,Config,System)
 % The script adds a new landmark factor to the current System
 % Author: Viorela Ila
 
-Sz=diag([1/factorR.data(6);1/factorR.data(8)]); % only diag cov.
-R=chol(inv(Sz)); %S^(-1/2)
 
 % The 2 poses linked by the constraint
 s1=factorR.data(2); % robot
@@ -38,10 +36,10 @@ end
 % Update System
 
 System.ndx=System.ndx(end)+1:System.ndx(end)+Config.LandDim;
-System.A(System.ndx,ndx1)=sparse2(R*H1); % Jacobian matrix
-System.A(System.ndx,ndx2)=sparse2(R*H2);
+System.A(System.ndx,ndx1)=sparse2(factorR.R*H1); % Jacobian matrix
+System.A(System.ndx,ndx2)=sparse2(factorR.R*H2);
 
-System.b(System.ndx)=R*d; % Independent term
+System.b(System.ndx)=factorR.R*d; % Independent term
 
 
 

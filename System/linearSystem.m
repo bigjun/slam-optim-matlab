@@ -31,7 +31,7 @@ end
 
 
 for i=1:nObs
-    factorR.data=Graph.F(i,:);
+    factorR=Graph.F(i,:);
     if factorR.data(end)~=99999
         if strcmp(System.type,'Hessian')
             ck=cputime;

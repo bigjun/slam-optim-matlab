@@ -5,8 +5,6 @@ function System=addFactorPose(factorR,Config,System)
 % Author: Viorela Ila
 
 global Timing
-Sz=diag([1/factorR.data(6);1/factorR.data(8);1/factorR.data(9)]); % only diag cov.
-R=chol(inv(Sz)); %S^(-1/2)
 
 % The 2 poses linked by the constraint
 s1=factorR.data(2);
@@ -36,8 +34,8 @@ h=Absolute2Relative(p1,p2); % Expectation
 System.ndx=System.ndx(end)+1:System.ndx(end)+Config.PoseDim;
 
 ck=cputime;
-System.A(System.ndx,ndx1)=sparse2(R*H1); % Jacobian matrix
-System.A(System.ndx,ndx2)=sparse2(R*H2);
+System.A(System.ndx,ndx1)=sparse2(factorR.R*H1); % Jacobian matrix
+System.A(System.ndx,ndx2)=sparse2(factorR.R*H2);
 if Timing.flag
     Timing.updateA=Timing.updateA+(cputime-ck);
     Timing.updateACnt=Timing.updateACnt+1;
@@ -47,7 +45,7 @@ end
 ck=cputime;
 d=z-h;
 d(end)=pi2pi(d(end));
-System.b(System.ndx)=R*d; % Independent term
+System.b(System.ndx)=factorR.R*d; % Independent term
 if Timing.flag
     Timing.updateB=Timing.updateB+(cputime-ck);
     Timing.updateBCnt=Timing.updateBCnt+1;
