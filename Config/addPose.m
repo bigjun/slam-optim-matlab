@@ -20,7 +20,7 @@ switch factorR.dof
         % Graph!
         p1.pose=p1.config(1:3);
         ypr=p1.config(4:6);
-        p1.Q=ypr2Q(ypr);
+        p1.Q=ypr2R(ypr(1),ypr(2),ypr(3));
         d=factorR.data(3:end); % TODO This must depend on factorR.
         p2=Relative2Absolute3D(p1,d); %TODO verify Relative2Absolute3D
     otherwise

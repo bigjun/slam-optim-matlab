@@ -9,7 +9,6 @@ function Result=testNonlinearOptimization
 % Author: Viorela Ila
 
 close all;
-clear; 
 
 dataSet='VP';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
@@ -89,20 +88,33 @@ Plot.fname=sprintf('%s_',Data.name);
 
 
 %CONFIG
-
+isLandmark=find(Data.ed(:,end)==99999);
+if isLandmark
+    landmark.data=Data.ed(isLandmark(1),:);
+    landmark=getDofRepresentation(landmark);
+    Config.LandDim=landmark.dof;   % landmark size
+    pose.data=Data.ed(1,:);
+    pose=getDofRepresentation(pose);
+    Config.PoseDim=pose.dof;   % pose size
+else
+    pose.data=Data.ed(1,:);
+    pose=getDofRepresentation(pose);
+    Config.PoseDim=pose.dof;   % pose size
+    Config.LandDim=0;
+end
+    
 
 Config.p0 =[0;0;(0*pi/180)];
 Config.s0=[[0.1^2,0,0];[0,0.1^2,0];[0,0,(5*pi/180)^2]];
 %Config.p0 = Data.vert(1,2:end)'; % prior
-%Config.s0 = diag([Data.ed(1,6),Data.ed(1,8),Data.ed(1,9)]); % noise on prior
-Config.LandDim=2;   % landmark size
-Config.PoseDim=3;   % pose size
+%Config.s0 = diag([Data.ed(1,6),Data.ed(1,8),Data.ed(1,9)]); % noise on
+%prior
 Config.ndx=0;       % config index
 Config.nPoses=0;    % number of poses 
 Config.nLands=0;    % number of landmarks
 Config.id2config=zeros(Data.nVert,2); % variable id to position in the config vector converter
 Config.id2config(Data.vert(1,1)+1,:)=[Config.nPoses,Config.nLands];
-Config.vector=[Config.p0,[1,1,1]']; % the second column is used for rapid identification of the landmark=0 vs pose=1
+Config.vector=[Config.p0,ones(Config.PoseDim,1)]; % the second column is used for rapid identification of the landmark=0 vs pose=1
 Config.size=size(Config.vector,1);
 
 %SYSTEM
@@ -144,6 +156,7 @@ else
     ind=1;
     while ind<=Data.nEd
         factorR.data=Data.ed(ind,:);
+        factorR.obsType=Data.obsType;
         [Config, System, Graph]=addFactor(factorR,Config, System, Graph);
         [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot); 
         ind=ind+1;
