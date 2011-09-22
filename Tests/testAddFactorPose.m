@@ -10,15 +10,15 @@ function Result=testAddFactorPose
 
 close all;
 
-dataSet='10K';
+dataSet='intel';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=500; % steps to process, if '0', the whole data is processed 
+maxID=100; % steps to process, if '0', the whole data is processed 
 
 incremental=0; 
 
 pathToolbox='~/LAAS/matlab/slam-optim-matlab'; %TODO automaticaly get the toolbox path
 Data=getData(dataSet,pathToolbox,saveFile,maxID);
-Data.obsType='rb'; % range and bering %TODO automaticaly detect obsType
+Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 
 % Timing
 global Timing
@@ -36,11 +36,15 @@ if isLandmark
     landmark.data=Data.ed(isLandmark(1),:);
     landmark=getDofRepresentation(landmark);
     Config.LandDim=landmark.dof;   % landmark size
-end
+    pose.data=Data.ed(1,:);
+    pose=getDofRepresentation(pose);
+    Config.PoseDim=pose.dof;   % pose size
+else
     pose.data=Data.ed(1,:);
     pose=getDofRepresentation(pose);
     Config.PoseDim=pose.dof;   % pose size
     Config.LandDim=0;
+end
 
 Config.p0 = Data.vert(1,2:end)'; % prior
 Config.s0 = diag([Data.ed(1,6),Data.ed(1,8),Data.ed(1,9)]); % noise on prior

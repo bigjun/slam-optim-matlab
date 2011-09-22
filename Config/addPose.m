@@ -16,13 +16,9 @@ switch factorR.dof
         d=InvertEdge(odo');
         p2=Relative2Absolute(p1.config,d);
     case 6
-        % TODO to be moved to processFactor. only processed factors in the
-        % Graph!
-        p1.pose=p1.config(1:3);
-        ypr=p1.config(4:6);
-        p1.Q=ypr2R(ypr(1),ypr(2),ypr(3));
-        d=factorR.data(3:end); % TODO This must depend on factorR.
-        p2=Relative2Absolute3D(p1,d); %TODO verify Relative2Absolute3D
+        d=factorR.data(3:9)';
+        p2=Relative2Absolute3D(p1.config,d); %TODO verify Relative2Absolute3D
+
     otherwise
         error('Cannot add this data dof')
 end

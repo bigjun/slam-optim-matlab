@@ -23,19 +23,20 @@ Data=getData(dataSet,pathToolbox,saveFile,maxID);
 Data.obsType='rb'; % range and bering %TODO automaticaly detect obsType
 
 %CONFIG
-
 isLandmark=find(Data.ed(:,end)==99999);
 if isLandmark
     landmark.data=Data.ed(isLandmark(1),:);
     landmark=getDofRepresentation(landmark);
     Config.LandDim=landmark.dof;   % landmark size
-end
+    pose.data=Data.ed(1,:);
+    pose=getDofRepresentation(pose);
+    Config.PoseDim=pose.dof;   % pose size
+else
     pose.data=Data.ed(1,:);
     pose=getDofRepresentation(pose);
     Config.PoseDim=pose.dof;   % pose size
     Config.LandDim=0;
-
-
+end
 
 q0 = Data.vert(1,5:end)'; % prior
 Q=q_to_dcm(q0);
@@ -50,8 +51,6 @@ Config.id2config=zeros(Data.nVert,2); % variable id to position in the config ve
 Config.id2config(Data.vert(1,1)+1,:)=[Config.nPoses,Config.nLands];
 Config.vector=[Config.p0,ones(Config.PoseDim,1)]; % the second column is used for rapid identification of the landmark=0 vs pose=1
 Config.size=size(Config.vector,1);
-
-
 
 
 % GRAPH

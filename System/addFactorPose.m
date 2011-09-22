@@ -9,25 +9,31 @@ global Timing
 % The 2 poses linked by the constraint
 s1=factorR.data(2);
 s2=factorR.data(1);
-
-% % check for the order of ids and invert the transformation if needed
-if (s1>s2)
-    z=factorR.data(3:5)';
-    s1=factorR.data(1);
-    s2=factorR.data(2);
-else
-     z=InvertEdge(factorR.data(3:5)');
-end
-
 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim];
 ndx2=[Config.PoseDim*Config.id2config((s2+1),1)+Config.LandDim*Config.id2config((s2+1),2)]+[1:Config.PoseDim];
-
-
 p1=Config.vector(ndx1,1); % The estimation of the two poses
 p2=Config.vector(ndx2,1);
 
-h=Absolute2Relative(p1,p2); % Expectation
-[H1 H2]=Absolute2RelativeJacobian(p1,p2); % Jacobian
+switch factorR.dof
+    case 3
+        % 2D case
+        % % check for the order of ids and invert the transformation if needed
+        if (s1>s2)
+            z=factorR.data(3:5)';
+            s1=factorR.data(1);
+            s2=factorR.data(2);
+        else
+            z=InvertEdge(factorR.data(3:5)');
+        end
+        h=Absolute2Relative(p1,p2); % Expectation
+        [H1 H2]=Absolute2RelativeJacobian(p1,p2); % Jacobian
+        
+    case 6
+        % 3D case
+
+        h=Absolute2Relative3D(p1,p2); % Expectation
+        [H1 H2]=Absolute2Relative3DJacobian(p1,p2); % Jacobian
+end
 
 % Update System
 
