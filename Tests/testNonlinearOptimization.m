@@ -54,7 +54,7 @@ end
 
 %DATA
 pathToolbox='~/LAAS/matlab/slam-optim-matlab'; %TODO automaticaly get the toolbox path
-Data=getData(dataSet,pathToolbox,saveFile,maxID);
+Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
 Data.obsType='rb'; % range and bering
 
 % PARAMETERS
