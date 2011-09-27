@@ -1,6 +1,6 @@
-function Data=getData(dataSet,pathToolbox,saveFile,maxID)
+function Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID)
 
-% getData
+% getDataFromFile
 % The script gets data from datafile and returns Data structure
 [vertices,edges]=loadDataSet(dataSet,pathToolbox,saveFile);
 if strcmp(dataSet,'10KHOGMan')
