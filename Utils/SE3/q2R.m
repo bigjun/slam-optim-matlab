@@ -1,4 +1,4 @@
-function A= q_to_dcm(q)
+function A= q2R(q)
 % Q_TO_DCM converts a quaternion [x y z w]' to a DCM and Q
     I = eye(3);
     q_ = q(1:3);
