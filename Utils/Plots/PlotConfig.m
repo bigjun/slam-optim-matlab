@@ -64,10 +64,10 @@ for i=1:nEdges
     p2{i}=vector(ndx2,1);
     if pl==99999 
         if plot_mesurements
-            if i==nEdges
+            %if i==nEdges
                 c='m';
                 line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
-            end
+            %end
         plot(p2{i}(1),p2{i}(2),'*','Color',c);
         %line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
         end
