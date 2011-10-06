@@ -18,7 +18,7 @@ pt=Config.vector(ndx2);
 % Update System
 
 switch factorR.type
-    case 'odometric'
+    case 'pose'
         F1=Absolute2RelativeJacobian(P1,z); % Jacobian
         Q=F1*factorR.Sz*F1'; % displacement noise in global coordinates
         iQ=Q\eye(Config.PoseDim);

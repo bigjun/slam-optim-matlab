@@ -29,7 +29,7 @@ p1=Config.vector(ndx1,1); % The estimation of the two poses
 p2=Config.vector(ndx2,1);
 
 
-if strcmp(factorR.type,'odometric')
+if strcmp(factorR.type,'pose')
     % augment L and d
     System.ndx=(System.ndx(end)+1):(System.ndx(end)+Config.PoseDim);
     ze=zeros(Config.PoseDim,1);

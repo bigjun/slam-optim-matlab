@@ -1,4 +1,24 @@
-function factorR=processFactor(factorR)
+function factorR=processFactor(factorR,idX)
+switch factorR.type
+    case 'pose'
+        if factorR.data(2)>factorR.data(1)
+            % in this case we need to invert the edge
+            factorR.data(1:2)=factorR.data(2:-1:1);
+            factorR.data(3:5)=InvertEdge(factorR.data(3:5)')';
+        end
+        if (ismember(factorR.data(2),idX))
+            if(ismember(factorR.data(1),idX))
+                factorR.type='loopClosure';
+            end
+        else
+            error('Disconnected graph!!')
+        end
+        
+    case 'landmark'
+        if(ismember(factorR.data(1),idX))
+            factorR.type='newLandmark';
+        end
+end
 
 switch factorR.dof
     case 2

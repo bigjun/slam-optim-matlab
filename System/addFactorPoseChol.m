@@ -26,7 +26,7 @@ ndx2=[Config.PoseDim*Config.id2config((s2+1),1)+Config.LandDim*Config.id2config(
 p1=Config.vector(ndx1,1); % The estimation of the two poses
 p2=Config.vector(ndx2,1);
 
-if strcmp(factorR.type,'odometric')
+if strcmp(factorR.type,'pose')
     % augment L and d
     System.ndx=(System.ndx(end)+1):(System.ndx(end)+Config.PoseDim);
     System.L(System.ndx,System.ndx)=zeros(Config.PoseDim,Config.PoseDim);
