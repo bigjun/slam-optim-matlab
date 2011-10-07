@@ -13,6 +13,12 @@ close all;
 dataSet='VP';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
 maxID=500; % steps to process, if '0', the whole data is processed 
+
+pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
+Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
+Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
+
+
 incremental=1; 
 %representation='Hessian';
 representation='Jacobian';
@@ -51,12 +57,6 @@ if Timing.flag
     Timing.addFactorCnt=1;
 end
 
-
-%DATA
-pathToolbox='~/LAAS/matlab/slam-optim-matlab'; %TODO automaticaly get the toolbox path
-Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
-Data.obsType='rb'; % range and bering
-
 % PARAMETERS
 
 %Solver
@@ -88,34 +88,8 @@ Plot.fname=sprintf('%s_',Data.name);
 
 
 %CONFIG
-isLandmark=find(Data.ed(:,end)==99999);
-if isLandmark
-    landmark.data=Data.ed(isLandmark(1),:);
-    landmark=getDofRepresentation(landmark);
-    Config.LandDim=landmark.dof;   % landmark size
-    pose.data=Data.ed(1,:);
-    pose=getDofRepresentation(pose);
-    Config.PoseDim=pose.dof;   % pose size
-else
-    pose.data=Data.ed(1,:);
-    pose=getDofRepresentation(pose);
-    Config.PoseDim=pose.dof;   % pose size
-    Config.LandDim=0;
-end
-    
+Config=initConfig(Data);
 
-Config.p0 =[0;0;(0*pi/180)];
-Config.s0=[[0.1^2,0,0];[0,0.1^2,0];[0,0,(5*pi/180)^2]];
-%Config.p0 = Data.vert(1,2:end)'; % prior
-%Config.s0 = diag([Data.ed(1,6),Data.ed(1,8),Data.ed(1,9)]); % noise on
-%prior
-Config.ndx=0;       % config index
-Config.nPoses=0;    % number of poses 
-Config.nLands=0;    % number of landmarks
-Config.id2config=zeros(Data.nVert,2); % variable id to position in the config vector converter
-Config.id2config(Data.vert(1,1)+1,:)=[Config.nPoses,Config.nLands];
-Config.vector=[Config.p0,ones(Config.PoseDim,1)]; % the second column is used for rapid identification of the landmark=0 vs pose=1
-Config.size=size(Config.vector,1);
 
 %SYSTEM
 System.type= representation;
@@ -142,9 +116,16 @@ Graph.F=[]; % keeps the factors
 Graph.idX=Data.vert(1,1); % the id in the variables in the graph
 
 if ~incremental    
-    
     % Build the system and initial configuration
-    [Config, System, Graph]=initialConfiguration(Data,Config,System,Graph);
+    [Config]=composePosesOdometry(Data,Config);
+    ind=1;
+    while ind<=Data.nEd
+        factorR.data=Data.ed(ind,:);
+        factorR=getDofRepresentation(factorR,Data.obsType);
+        factorR=processFactor(factorR,Graph.idX);
+        [System,Graph]=addFactor(factorR,Config,System,Graph);
+        ind=ind+1;
+    end
     Result.initConfig=Config;
     % plot initial config
     if Plot.InitConfig
@@ -156,9 +137,11 @@ else
     ind=1;
     while ind<=Data.nEd
         factorR.data=Data.ed(ind,:);
-        factorR.obsType=Data.obsType;
-        [Config, System, Graph]=addFactor(factorR,Config, System, Graph);
-        [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot); 
+        factorR=getDofRepresentation(factorR,Data.obsType);
+        factorR=processFactor(factorR,Graph.idX);
+        Config=addVariableConfig(factorR,Config,Graph.idX);
+        [System,Graph]=addFactor(factorR,Config,System,Graph);
+        [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot);
         ind=ind+1;
         
     end

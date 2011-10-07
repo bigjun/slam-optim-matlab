@@ -56,7 +56,7 @@ ck=cputime;
 d2 = System.d(ndx1(1):ndx2(end),1);
 dz=z-h;
 dz(end)=pi2pi(dz(end));
-System.d(ndx1(1):ndx2(end),1) = L22_new\(L22*d2+H'*dz);
+System.d(ndx1(1):ndx2(end),1) = L22_new\(L22*d2+H'*factorR.R*dz);
 if Timing.flag
     Timing.updateD=Timing.updateD+(cputime-ck);
     Timing.updateDcnt=Timing.updateDcnt+1;

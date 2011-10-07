@@ -43,7 +43,7 @@ h=Absolute2Relative(p1,p2); % Expectation
 ck=cputime;
 d=z-h;
 d(end)=pi2pi(d(end));
-System.eta(ndx1(1):ndx2(end),1)=System.eta(ndx1(1):ndx2(end),1)+full(H'*d);
+System.eta(ndx1(1):ndx2(end),1)=System.eta(ndx1(1):ndx2(end),1)+full(H'*factorR.R*d);
 if Timing.flag
     Timing.updateEta=Timing.updateEta+(cputime-ck);
     Timing.updateEtaCnt=Timing.updateEtaCnt+1;
