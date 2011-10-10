@@ -123,7 +123,8 @@ if ~incremental
         factorR.data=Data.ed(ind,:);
         factorR=getDofRepresentation(factorR,Data.obsType);
         factorR=processFactor(factorR,Graph.idX);
-        [System,Graph]=addFactor(factorR,Config,System,Graph);
+        System=addFactor(factorR,Config,System);
+        Graph=addVarLinkToGraph(factorR,Graph);
         ind=ind+1;
     end
     Result.initConfig=Config;
@@ -140,7 +141,8 @@ else
         factorR=getDofRepresentation(factorR,Data.obsType);
         factorR=processFactor(factorR,Graph.idX);
         Config=addVariableConfig(factorR,Config,Graph.idX);
-        [System,Graph]=addFactor(factorR,Config,System,Graph);
+        System=addFactor(factorR,Config,System);
+        Graph=addVarLinkToGraph(factorR,Graph);
         [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot);
         ind=ind+1;
         

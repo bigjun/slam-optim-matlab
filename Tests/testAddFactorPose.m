@@ -45,7 +45,8 @@ while ind<=Data.nEd
     factorR=getDofRepresentation(factorR);
     factorR=processFactor(factorR,GraphJ.idX);
     ConfigJ=addVariableConfig(factorR,ConfigJ,GraphJ.idX);
-    [SystemJ, GraphJ]=addFactor(factorR,ConfigJ, SystemJ, GraphJ);
+    SystemJ=addFactor(factorR,ConfigJ, SystemJ);
+    GraphJ=addVarLinkToGraph(factorR,GraphJ);
     ind=ind+1;
     
 end
@@ -64,7 +65,8 @@ while ind<=Data.nEd
     factorR=getDofRepresentation(factorR);
     factorR=processFactor(factorR,GraphH.idX);
     ConfigH=addVariableConfig(factorR,ConfigH,GraphH.idX);
-    [SystemH, GraphH]=addFactor(factorR,ConfigH, SystemH, GraphH);
+    SystemH=addFactor(factorR,ConfigH, SystemH);
+    GraphH=addVarLinkToGraph(factorR,GraphH);
     ind=ind+1;
     
 end
@@ -85,7 +87,8 @@ while ind<=Data.nEd
     factorR=getDofRepresentation(factorR);
     factorR=processFactor(factorR,GraphL.idX);
     ConfigL=addVariableConfig(factorR,ConfigL,GraphL.idX);
-    [SystemL, GraphL]=addFactor(factorR,ConfigL, SystemL, GraphL);
+    SystemL=addFactor(factorR,ConfigL, SystemL);
+    GraphL=addVarLinkToGraph(factorR,GraphL);
     ind=ind+1;
 end
 clear ConfigL GraphL

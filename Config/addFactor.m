@@ -1,4 +1,4 @@
-function [System, Graph]=addFactor( factorR, Config, System, Graph)
+function System=addFactor( factorR, Config, System)
 
 % [Config, System, Graph]=addFactor( factorR,Config, System, Graph)
 % The script adds a new factor to the current representation: 
@@ -15,9 +15,7 @@ switch factorR.type
             otherwise
                 System=addFactorPose(factorR,Config,System);
         end
-        Graph.idX= [Graph.idX;factorR.data(1)];
-        %Graph.F=[Graph.F;factorR.data];
-        Graph.F=[Graph.F;factorR];
+
     case {'landmark','newLandmark'}
         switch System.type
             case 'Hessian'
@@ -27,9 +25,6 @@ switch factorR.type
             otherwise
                 System=addFactorLandmark(factorR,Config,System);
         end
-        Graph.idX= [Graph.idX;factorR.data(1)];
-        %Graph.F=[Graph.F;factorR.data];
-        Graph.F=[Graph.F;factorR];
     otherwise
         error('This type of factor is not handeled ')
 end

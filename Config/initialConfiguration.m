@@ -1,14 +1,16 @@
 function [Config, System, Graph]=initialConfiguration(Data,Config,System,Graph)
+
+%TODO check if we need this function
 ind=1;
 global Timing
-if Data.edTree   
-    [Config]=composePosesTree(Data,Config);
-else  
-    [Config]=composePosesOdometry(Data,Config);
-end 
-while ind<=Data.nEd
-    factorR=processFactor(ind,Data,Graph);
-    [System, Graph]=addFactor(factorR,Config,System, Graph);
-    ind=ind+1;
 
+Config=composePosesOdometry(Data,Config);
+while ind<=Data.nEd
+    factorR.data=Data.ed(ind,:);
+    factorR=getDofRepresentation(factorR,Data.obsType);
+    factorR=processFactor(factorR,Graph.idX);
+    System=addFactor(factorR,Config,System);
+    Graph=addVarLinkToGraph(factorR,Graph);
+    ind=ind+1;
+    
 end
