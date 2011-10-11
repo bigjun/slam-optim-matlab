@@ -78,9 +78,6 @@ end
 PlotConfig(Plot,Config,Graph,'r','b');
 
 
-
-%
-
 %test compose poses and addFactors
 
 
