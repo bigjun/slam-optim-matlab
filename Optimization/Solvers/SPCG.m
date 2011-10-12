@@ -1,5 +1,5 @@
 
-function [x,info,res_v,error_v]=SPCG(A1,b1,A2,b2,maxIT,epsilon,startFromTree,plot_residual,mu)
+function [x,info,res_v,error_v]=SPCG(A1,b1,A2,b2,maxIT,epsilon,subgraphSolver,startFromTree,plot_residual,mu)
 % Subgraph Preconditioned Conjugate Gradient
 
 n= size(A1,2);
@@ -16,14 +16,18 @@ if (nargin < 6)
 end
 
 if (nargin < 7)
-    startFromTree=0;
+    subgraphSolver='spcg';
 end
 
 if (nargin < 8)
-    plot_residual=0;
+    startFromTree=0;
 end
 
 if (nargin < 9)
+    plot_residual=0;
+end
+
+if (nargin < 10)
     if plot_residual
         error('Error computation requires the mean');
     else
@@ -34,42 +38,76 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % solve the tree
-ck=cputime;
+
+switch subgraphSolver
+    case 'chol'
+        ck=cputime;
+        %ck=tic;
+        R1 = chol2(A1'*A1);
+        R1T=R1;
+        xbar = R1\((R1T)\(A1'*b1));       
+%         [R1, g, PT] = chol (A1'*A1, 'lower') ;
+%         P=PT';
+%         R1T=R1;
+%         xbar= PT * (R1T \ (R1 \ (P * A1'*b1))) ;
+         timeSolveTree=(cputime-ck);
+        %timeSolveTree=toc(ck);%(cputime-ck);
+    case 'spqr'
+        %ck=cputime;
+        ck=tic;
+        [c1,R1,p] = spqr (A1,b1, struct('ordering','fixed')) ;
+        xbar= R1\c1;
+        R1=R1(1:n,1:n);
+        R1T=R1';
+        timeSolveTree=(cputime-ck);
+        %timeSolveTree=toc(ck);%(cputime-ck);
+    otherwise
+        error('Direct Solver not implemented');
+end
+
+%%% spqr
 [c1,R1,p] = spqr (A1,b1, struct('ordering','fixed')) ;
 xbar= R1\c1; 
 R1=R1(1:n,1:n);
-timeSolveTree=(cputime-ck);
+
+%%%chol2, should switch to cholmod2 eventually..
+% R1 = chol2(A1'*A1);
+% xbar = R1\((R1')\(A1'*b1));
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % initialization
 it=1;
 b=[b1;b2];
+
 if startFromTree
     % if we want to start with y0 other than zero
-    ck=cputime;
+    tic;%ck=cputime;
     b2_bar=b2-A2*xbar;
     R1_t=R1';
-    y=-R1*xbar;
-    %tmp= R1_t\A2'; 
-    %g=y+tmp*(tmp'*y-b2_bar);
-    
-    %memory efficient
-    g= y + R1_t\((A2*(R1\y)-b2_bar)'*A2)';
-    
-    gamma=g'*g;
-    d=-g;
-    timeInit=(cputime-ck);
+		y = -R1*xbar;
+		r1 = -y;
+		r2 = b2_bar - A2*(R1\y);
+		s = r1 + R1_t \ (r2'*A2)'; 
+		p = s ;
+		gamma = s' * s; 
+		
+		timeInit=toc;%(cputime-ck);
     threshold=epsilon^2*gamma *((norm(b)/norm(b2_bar))^2);% set the threshold
 else
-    ck=cputime;
+    ck=tic;%cputime;
     b2_bar=b2-A2*xbar;
     R1_t=R1';
     y=zeros(n,1);
-    g=-(R1_t\(b2_bar'*A2)');
-    gamma=g'*g;
-    d=-g;
-    timeInit=(cputime-ck);
+		r1 = zeros(n,1);
+		r2 = b2_bar ;
+		s = R1_t \ (r2'*A2)'; 
+		p = s ;
+		gamma = s' * s; 
+		
+    timeInit=toc(ck);
     threshold=epsilon^2*gamma *((norm(b)/norm(b2_bar))^2);% set the threshold
 end
 
@@ -90,28 +128,26 @@ end
 done=false;
 
 timeIterations=0;
+
 while  ~done
-    ck=cputime;
-    %calculate step size and take optimal step
-    Ad=A2*(R1\d);
-    %alpha=-(d'*g)/(d'*d + Ad'*Ad); % can be simplified!!! 
-    alpha=gamma/(d'*d + Ad'*Ad); 
-    y=y+alpha*d;
-    
-    %update gradient
-    g=g+alpha*(d+R1_t\(Ad'*A2)');
-    new_gamma=g'*g;
+    tStartIteration = tic;
+    q = A2*(R1\p);
+		alpha = gamma / (p'*p + q'*q);
+		y = y + alpha * p;
+		r1 = r1 - alpha * p;
+		r2 = r2 - alpha * q;
+		s = r1 + R1_t \ (r2'*A2)'; 
+		new_gamma = s'*s; 
+		beta = new_gamma / gamma;
+		p = s + beta*p ;
     
     %stop condition
     done=((new_gamma<threshold)||(it >=maxIT));
-    
-    %calculate new search direction
-    beta=new_gamma/gamma;
-    d=-g+beta*d;
-    
-    % prepare for next iteration
+
+		% prepare for next iteration
     gamma=new_gamma;
-    timeIterations=timeIterations+(cputime-ck);
+    timeIter = toc(tStartIteration);%(cputime-ck);
+    timeIterations=timeIterations+timeIter;
     
     it=it+1;
     
@@ -128,16 +164,16 @@ end
 %These two are the same x=R1\(y+Q1'* b1) and x=R1\(y+R1*xbar);
 
 if plot_residual
-    ck=cputime;
-    timeSolution=(cputime-ck);
+    tic;%ck=cputime;
+    timeSolution=toc;%(cputime-ck);
     res_v=res_v(1:it);
     info.res=res_v(it);
     error_v=error_v(1:it);
     info.error=error_v(it);
 else
-    ck=cputime;
+    tic;%ck=cputime;
     x=(R1\y+xbar);
-    timeSolution=(cputime-ck);
+    timeSolution=toc;%(cputime-ck);
     info.res=norm(b-A*x)/nb;
     % if not plot_residual
     res_v=[];

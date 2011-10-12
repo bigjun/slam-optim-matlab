@@ -36,23 +36,23 @@ end
 %initialization
 
 if plot_residual
-    ck=cputime;
+    tic;%ck=cputime;
     x=initialization;
     g=-((b-A*x)'*A)';
     d=-g;
     it=1;
     gamma=g'*g;
     threshold=epsilon^2*gamma ;
-    timeInit=(cputime-ck);
+    timeInit=toc;%(cputime-ck);
 else
-    ck=cputime;
+    tic;%ck=cputime;
     x=initialization;
     g=-(b'*A)';
     d=-g;
     it=1;
     gamma=g'*g;
     threshold=epsilon^2*gamma ;
-    timeInit=(cputime-ck);
+    timeInit=toc;%(cputime-ck);
 end
 
 % needed to compute residual and error
@@ -69,7 +69,7 @@ end
 done=false;
 timeIterations=0;
 while  ~done
-    ck=cputime;
+    tic;%ck=cputime;
     %calculate step size and take optimal step
     Ad=A*d; 
     %alpha=-(d'*g)/(Ad'*Ad);
@@ -89,7 +89,8 @@ while  ~done
     
     % prepare for next iteration
     gamma=new_gamma;
-    timeIterations=timeIterations+(cputime-ck);
+    timeIter = toc;%(cputime-ck);
+    timeIterations=timeIterations+timeIter;
     it=it+1;
     
     if plot_residual
