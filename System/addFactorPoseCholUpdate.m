@@ -5,20 +5,18 @@ function System=addFactorPoseCholUpdate(factorR,Config,System)
 % Author: Viorela Ila
 
 
-Sz=diag([1/factorR.data(6);1/factorR.data(8);1/factorR.data(9)]); % only diag cov.
-R=chol(inv(Sz)); %S^(-1/2)
 
 % The 2 poses linked by the constraint
-s1=factorR.data(2);
-s2=factorR.data(1);
+s1=factorR.origine;
+s2=factorR.final;
 
 % % check for the order of ids and invert the transformation if needed
 if (s1>s2)
-    z=factorR.data(3:5)';
-    s1=factorR.data(1);
-    s2=factorR.data(2);
+    z=factorR.measure';
+    s1=factorR.final;
+    s2=factorR.origine;
 else
-     z=InvertEdge(factorR.data(3:5)');
+     z=InvertEdge(factorR.measure');
 end
 
 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim];
@@ -46,14 +44,14 @@ H=zeros(Config.PoseDim,System.ndx(end));
 H(:,ndx1)=H1;
 H(:,ndx2)=H2;
 H=sparse(H(1:Config.PoseDim,ndx1(1):System.ndx(end)));
-iSz=Sz\eye(Config.PoseDim); 
+iSz=factorR.Sz\eye(Config.PoseDim); 
 Omega=H'*iSz*H;
 
 % update L
 L22 = System.L(ndx1(1):ndx2(end),ndx1(1):ndx2(end)) ;
 L22_new=(chol(L22*L22'+Omega))';
 System.L(ndx1(1):ndx2(end),ndx1(1):ndx2(end))  = L22_new;
-System.L = chol_update(System.L,R*H) 
+System.L = chol_update(System.L,factorR.R*H); 
 
 % update d
 d2 = System.d(ndx1(1):ndx2(end),1);

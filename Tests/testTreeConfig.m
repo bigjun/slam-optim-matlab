@@ -68,9 +68,7 @@ Graph.Matrix=sparse(zeros(Data.nVert,Data.nVert));
 
 ind=1;
 while ind<=Data.nEd
-    factorR.data=Data.ed(ind,:);
-    factorR=getDofRepresentation(factorR,Data.obsType);
-    factorR=processFactor(factorR,Graph.idX);
+    factorR=processEdgeData(Data.ed(ind,:),Data.obsType,Graph.idX);
     System=addFactor(factorR,Config,System);
     Graph=addVarLinkToGraph(factorR,Graph);
     ind=ind+1;

@@ -8,16 +8,16 @@ function [System]=addFactorPoseHessian(factorR,Config,System)
 global Timing
 
 % The 2 poses linked by the constraint
-s1=factorR.data(2);
-s2=factorR.data(1);
+s1=factorR.origine;
+s2=factorR.final;
 
 % % check for the order of ids and invert the transformation if needed
 if (s1>s2)
-    z=factorR.data(3:5)';
-    s1=factorR.data(1);
-    s2=factorR.data(2);
+    z=factorR.measure';
+    s1=factorR.final;
+    s2=factorR.origine;
 else
-     z=InvertEdge(factorR.data(3:5)');
+     z=InvertEdge(factorR.measure');
 end
 
 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim];

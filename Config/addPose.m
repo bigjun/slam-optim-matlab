@@ -5,18 +5,18 @@ function Config=addPose(factorR,Config)
 % Author: Viorela Ila
 
 % process indexes
-s1=factorR.data(2); % pose in the config
-s2=factorR.data(1); % new pose
+s1=factorR.origine; % pose in the config
+s2=factorR.final; % new pose
 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim]; %Change this formula
 
 p1.config=Config.vector(ndx1,1);
 switch factorR.dof
     case 3
-        odo=factorR.data(3:5);
+        odo=factorR.measure;
         d=InvertEdge(odo');
         p2=Relative2Absolute(p1.config,d);
     case 6
-        d=factorR.data(3:9)';
+        d=factorR.measure';
         p2=Relative2Absolute3D(p1.config,d); %TODO verify Relative2Absolute3D
 
     otherwise

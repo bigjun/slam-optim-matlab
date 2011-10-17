@@ -2,7 +2,7 @@ function Graph=getGraphFromData(Data,Graph)
 % Gets graph from data
 ind=1;
 while ind<=Data.nEd
-    factorR.data=Data.ed(ind,:);
+    factorR=processEdgeData(Data.ed(ind,:),Data.obsType,Graph.idX);
     Graph=addVarLinkToGraph(factorR,Graph);
     ind=ind+1;
 end

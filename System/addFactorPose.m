@@ -7,8 +7,8 @@ function System=addFactorPose(factorR,Config,System)
 global Timing
 
 % The 2 poses linked by the constraint
-s1=factorR.data(2);
-s2=factorR.data(1);
+s1=factorR.origine;
+s2=factorR.final;
 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim];
 ndx2=[Config.PoseDim*Config.id2config((s2+1),1)+Config.LandDim*Config.id2config((s2+1),2)]+[1:Config.PoseDim];
 p1=Config.vector(ndx1,1); % The estimation of the two poses
@@ -19,11 +19,11 @@ switch factorR.dof
         % 2D case
         % % check for the order of ids and invert the transformation if needed
         if (s1>s2)
-            z=factorR.data(3:5)';
-            s1=factorR.data(1);
-            s2=factorR.data(2);
+            z=factorR.measure';
+            s1=factorR.final;
+            s2=factorR.origine;
         else
-            z=InvertEdge(factorR.data(3:5)');
+            z=InvertEdge(factorR.measure');
         end
         h=Absolute2Relative(p1,p2); % Expectation
         [H1 H2]=Absolute2RelativeJacobian(p1,p2); % Jacobian

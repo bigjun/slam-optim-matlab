@@ -3,16 +3,13 @@ function Config=initConfig(Data)
 % get the pose and landmark DOF
 isLandmark=find(Data.ed(:,end)==99999);
 if isLandmark
-    landmark.data=Data.ed(isLandmark(1),:);
-    landmark=getDofRepresentation(landmark,Data.obsType);
-    Config.LandDim=landmark.dof;   % landmark size
-    pose.data=Data.ed(1,:);
-    pose=getDofRepresentation(pose);
-    Config.PoseDim=pose.dof;   % pose size
+    dofL=getDofRepresentation(Data.ed(isLandmark(1),:),Data.obsType);
+    Config.LandDim=dofL;   % landmark size
+    dofP=getDofRepresentation(Data.ed(1,:));
+    Config.PoseDim=dofP;   % pose size
 else
-    pose.data=Data.ed(1,:);
-    pose=getDofRepresentation(pose);
-    Config.PoseDim=pose.dof;   % pose size
+    dofP=getDofRepresentation(Data.ed(1,:));
+    Config.PoseDim=dofP;   % pose size
     Config.LandDim=0;
 end
 

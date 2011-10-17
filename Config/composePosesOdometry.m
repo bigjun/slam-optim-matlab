@@ -11,10 +11,8 @@ Config.id2config(Data.ed(1,2)+1,:)=[Config.nPoses,Config.nLands];
 idX=Data.vert(1,1);
 ind=1;
 while ind<Data.nEd
-    factorR.data=Data.ed(ind,:);
-    factorR=getDofRepresentation(factorR,Data.obsType);
-    factorR=processFactor(factorR,idX);
+    factorR=processEdgeData(Data.ed(ind,:),Data.obsType,idX);
     Config=addVariableConfig(factorR,Config,idX);
-    idX=[idX;factorR.data(1)];
+    idX=[idX;factorR.final];
     ind=ind+1;
 end

@@ -6,13 +6,14 @@ function Config=addVariableConfig(factorR,Config,idX)
   
 switch factorR.type
     case {'pose','loopClosure'} 
-        if factorR.data(2)>factorR.data(1)
+        if factorR.origine>factorR.final
             % in this case we need to invert the edge
-            factorR.data(1:2)=factorR.data(2:-1:1);
-            factorR.data(3:5)=InvertEdge(factorR.data(3:5)')';
+            factorR.origine=final;
+            factorR.final=origine;
+            factorR.measure=InvertEdge(factorR.measure')';
         end
-        if (ismember(factorR.data(2),idX))
-            if~(ismember(factorR.data(1),idX))
+        if (ismember(factorR.origine,idX))
+            if~(ismember(factorR.final,idX))
                 Config=addPose(factorR,Config);
             end
         else
@@ -20,8 +21,8 @@ switch factorR.type
         end
         
     case {'landmark','newLandmark'}
-        if (ismember(factorR.data(2),idX))
-            if~(ismember(factorR.data(1),idX))
+        if (ismember(factorR.origine,idX))
+            if~(ismember(factorR.final,idX))
                 Config=addLandmark(factorR,Config);
             end
         else

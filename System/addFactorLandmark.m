@@ -6,9 +6,9 @@ function System=addFactorLandmark(factorR,Config,System)
 
 
 % The 2 poses linked by the constraint
-s1=factorR.data(2); % robot
-s2=factorR.data(1); % landmark
-z=factorR.data(3:4)';
+s1=factorR.origine; % robot
+s2=factorR.final; % landmark
+z=factorR.measure';
 
 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim];
 ndx2=[Config.PoseDim*Config.id2config((s2+1),1)+Config.PoseDim+Config.LandDim*Config.id2config((s2+1),2)-Config.LandDim]+[1:Config.LandDim];

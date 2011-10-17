@@ -41,9 +41,7 @@ SystemJ.b(SystemJ.ndx,1)=zeros(ConfigJ.PoseDim,1); % the pose will not be update
 
 ind=1;
 while ind<=Data.nEd
-    factorR.data=Data.ed(ind,:);
-    factorR=getDofRepresentation(factorR);
-    factorR=processFactor(factorR,GraphJ.idX);
+
     ConfigJ=addVariableConfig(factorR,ConfigJ,GraphJ.idX);
     SystemJ=addFactor(factorR,ConfigJ, SystemJ);
     GraphJ=addVarLinkToGraph(factorR,GraphJ);

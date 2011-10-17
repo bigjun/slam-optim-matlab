@@ -32,38 +32,40 @@ end
 
 for i=1:nObs
     factorR=Graph.F(i,:);
-    if factorR.data(end)~=99999
-        if strcmp(System.type,'Hessian')
-            ck=cputime;
-            System=addFactorPoseHessian(factorR,Config,System);
-            if Timing.flag
-                Timing.addFactor=Timing.addFactor+(cputime-ck);
-                Timing.addFactorCnt=Timing.addFactorCnt+1;
+    switch factorR.type
+        case {'pose','loopClosure'}
+            switch System.type
+                case 'Hessian'
+                    ck=cputime;
+                    System=addFactorPoseHessian(factorR,Config,System);
+                    if Timing.flag
+                        Timing.addFactor=Timing.addFactor+(cputime-ck);
+                        Timing.addFactorCnt=Timing.addFactorCnt+1;
+                    end
+                case'CholFactor'
+                    ck=cputime;
+                    System=addFactorPoseChol(factorR,Config,System);
+                    if Timing.flag
+                        Timing.addFactor=Timing.addFactor+(cputime-ck);
+                        Timing.addFactorCnt=Timing.addFactorCnt+1;
+                    end
+                otherwise
+                    ck=cputime;
+                    System=addFactorPose(factorR,Config,System);
+                    if Timing.flag
+                        Timing.addFactor=Timing.addFactor+(cputime-ck);
+                        Timing.addFactorCnt=Timing.addFactorCnt+1;
+                    end
+            end          
+        case {'landmark','newLandmark'}
+            switch System.type
+                case 'Hessian'
+                    error('This method is not implemented')
+                case'CholFactor'
+                    error('This method is not implemented');
+                otherwise
+                    System=addFactorLandmark(factorR,Config,System);
             end
-        elseif strcmp(System.type,'CholFactor');
-            ck=cputime;
-            System=addFactorPoseChol(factorR,Config,System);
-            if Timing.flag
-                Timing.addFactor=Timing.addFactor+(cputime-ck);
-                Timing.addFactorCnt=Timing.addFactorCnt+1;
-            end
-        else
-            ck=cputime;
-            System=addFactorPose(factorR,Config,System);
-            if Timing.flag
-                Timing.addFactor=Timing.addFactor+(cputime-ck);
-                Timing.addFactorCnt=Timing.addFactorCnt+1;
-            end
-        end
-        
-    else
-        if strcmp(System.type,'Hessian')
-            error('This method is not implemented')
-        elseif strcmp(System.type,'CholFactor');
-            error('This method is not implemented');
-        else
-            System=addFactorLandmark(factorR,Config,System);
-        end
     end
 end
 

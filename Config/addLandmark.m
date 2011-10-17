@@ -4,18 +4,18 @@ function Config=addLandmark(factorR,Config)
 % The script adds a new landmark to the current Config
 % Author: Viorela Ila
 
-s1=factorR.data(2); % pose in the config
-s2=factorR.data(1); % new landmark
+s1=factorR.origine; % pose in the config
+s2=factorR.final; % new landmark
 
 switch factorR.obsType
     case 'rb'
-        r=factorR.data(3);
-        b=factorR.data(4);
+        r=factorR.measure(1);
+        b=factorR.measure(2);
         dxl=r*cos(b);
         dyl=r*sin(b);
     case 'dxdy'
-        dxl=factorR.data(3);
-        dyl=factorR.data(4);
+        dxl=factorR.measure(1);
+        dyl=factorR.measure(2);
     otherwise
         error('unknown observation type');
 end

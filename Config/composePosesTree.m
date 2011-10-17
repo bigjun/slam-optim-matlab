@@ -22,8 +22,7 @@ while nl2
         s2=list2(i2,2);
         current=s1; % one endpoint
         base=(find(current==list1));
-        factorR.data=Data.edTree(s0,:);
-        factorR=getDofRepresentation(factorR,Data.obsType);
+        factorR=processEdgeData(Data.edTree(s0,:),Data.obsType);
         if base
             switch factorR.type
                 case {'pose','loopClosure'}
@@ -42,12 +41,14 @@ while nl2
             if base
                 switch factorR.type
                     case {'pose','loopClosure'}
-                        d=InvertEdgePose(Data.edTree(s0,3:5)')';
-                        factorR.data=[Data.edTree(s0,2:-1:1),d,Data.edTree(s0,6:end)];
+                        factorR.origine=final;
+                        factorR.final=origine;
+                        factorR.measure=InvertEdgePose(factorR.measure')'; %(Data.edTree(s0,3:5)')';
                         Config=addPose(factorR,Config);
                     case {'landmark','newLandmark'}
-                        d=InvertEdgeLandmark(Data.edTree(s0,3:4)',Data.obsType,Config.PoseDim)';
-                        factorR.data=[Data.edTree(s0,2:-1:1),d,Data.edTree(s0,5:end)]; %TODO change acording to the LandDim
+                        factorR.origine=final;
+                        factorR.final=origine;
+                        factorR.measure=InvertEdgeLandmark(factorR.measure',Data.obsType,Config.PoseDim)';
                         Config=addLandmark(factorR,Config);
                 end
                 % add to list1 and delete from list2

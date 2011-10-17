@@ -41,38 +41,35 @@ nEdges=size(F,1);
 p1{nEdges} = [];
 p2{nEdges} = [];
 for i=1:nEdges
-    s1=F(i).data(2);
-    s2=F(i).data(1);
-    pl=F(i).data(end);
-    %s1=F(i,2);
-    %s2=F(i,1);
-    %pl=F(i,end);
-    if pl==99999
-        dim=LandDim;
-        ndx1=[PoseDim*id2config((s1+1),1)+LandDim*id2config((s1+1),2)]+[1:dim];
-        ndx2=[PoseDim*id2config((s2+1),1)+PoseDim+LandDim*id2config((s2+1),2)]+[1:dim]-LandDim;
-        c=c2;
-    else
-        dim=PoseDim;
-        ndx1=[PoseDim*id2config((s1+1),1)+LandDim*id2config((s1+1),2)]+[1:dim];
-        ndx2=[PoseDim*id2config((s2+1),1)+LandDim*id2config((s2+1),2)]+[1:dim];
-        c=c1;
-        
+    s1=F(i).origine;
+    s2=F(i).final; 
+    switch F(i).type
+        case {'pose','loopClosure'}
+            dim=PoseDim;
+            ndx1=[PoseDim*id2config((s1+1),1)+LandDim*id2config((s1+1),2)]+[1:dim];
+            ndx2=[PoseDim*id2config((s2+1),1)+LandDim*id2config((s2+1),2)]+[1:dim];
+            c=c1;
+        case {'landmark','newLandmark'}
+            dim=LandDim;
+            ndx1=[PoseDim*id2config((s1+1),1)+LandDim*id2config((s1+1),2)]+[1:dim];
+            ndx2=[PoseDim*id2config((s2+1),1)+PoseDim+LandDim*id2config((s2+1),2)]+[1:dim]-LandDim;
+            c=c2;
     end
-
     p1{i}=vector(ndx1,1); % The estimation of the two poses
     p2{i}=vector(ndx2,1);
-    if pl==99999 
-        if plot_mesurements
-            %if i==nEdges
+    switch F(i).type
+        case {'pose','loopClosure'} 
+            line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
+        case {'landmark','newLandmark'}
+            if plot_mesurements
+                %if i==nEdges
                 c='m';
                 line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
-            %end
-        plot(p2{i}(1),p2{i}(2),'*','Color',c);
-        %line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
-        end
-    else
-        line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
+                %end
+                plot(p2{i}(1),p2{i}(2),'*','Color',c);
+                %line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
+            end
+            
     end
 end
 axis equal
