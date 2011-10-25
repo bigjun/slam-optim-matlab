@@ -12,7 +12,7 @@ close all;
 
 dataSet='VP';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=500; % steps to process, if '0', the whole data is processed 
+maxID=50; % steps to process, if '0', the whole data is processed 
 
 pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
 Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
@@ -120,9 +120,7 @@ if ~incremental
     [Config]=composePosesOdometry(Data,Config);
     ind=1;
     while ind<=Data.nEd
-        factorR.data=Data.ed(ind,:);
-        factorR=getDofRepresentation(factorR,Data.obsType);
-        factorR=processFactor(factorR,Graph.idX);
+        factorR=processEdgeData(Data.ed(ind,:),Data.obsType,Graph.idX);
         System=addFactor(factorR,Config,System);
         Graph=addVarLinkToGraph(factorR,Graph);
         ind=ind+1;
@@ -137,9 +135,7 @@ if ~incremental
 else
     ind=1;
     while ind<=Data.nEd
-        factorR.data=Data.ed(ind,:);
-        factorR=getDofRepresentation(factorR,Data.obsType);
-        factorR=processFactor(factorR,Graph.idX);
+        factorR=processEdgeData(Data.ed(ind,:),Data.obsType,Graph.idX);
         Config=addVariableConfig(factorR,Config,Graph.idX);
         System=addFactor(factorR,Config,System);
         Graph=addVarLinkToGraph(factorR,Graph);
