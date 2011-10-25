@@ -32,7 +32,6 @@ switch factorR.obsType
 end
 
 
-
 % Update System
 
 System.ndx=System.ndx(end)+1:System.ndx(end)+Config.LandDim;

@@ -1,4 +1,4 @@
-function System=addFactor( factorR, Config, System)
+function [System,factorR]=addFactor( factorR, Config, System)
 
 % [Config, System, Graph]=addFactor( factorR,Config, System, Graph)
 % The script adds a new factor to the current representation: 
@@ -14,6 +14,7 @@ switch factorR.type
                 System=addFactorPoseChol(factorR,Config,System);
             otherwise
                 System=addFactorPose(factorR,Config,System);
+                factorR.ndxA=System.ndx;
         end
 
     case {'landmark','newLandmark'}
@@ -24,6 +25,7 @@ switch factorR.type
                 System=addFactorLandmarkChol(factorR,Config,System);
             otherwise
                 System=addFactorLandmark(factorR,Config,System);
+                factorR.ndxA=System.ndx;
         end
     otherwise
         error('This type of factor is not handeled ')

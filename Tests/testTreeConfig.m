@@ -1,4 +1,4 @@
-function Result=testTreeConfig
+function testTreeConfig
 
 % testNonlinearOptimization
 % The script applyes nonlinear optimization to a Graph SLAM problem
@@ -69,11 +69,18 @@ Graph.Matrix=sparse(zeros(Data.nVert,Data.nVert));
 ind=1;
 while ind<=Data.nEd
     factorR=processEdgeData(Data.ed(ind,:),Data.obsType,Graph.idX);
-    System=addFactor(factorR,Config,System);
+    [System,factorR]=addFactor(factorR,Config,System);
     Graph=addVarLinkToGraph(factorR,Graph);
     ind=ind+1;
 end
 PlotConfig(Plot,Config,Graph,'r','b');
+[Graph,System]=separateTreeConstraintsFromMatrix(tree,Graph,System);
+
+figure
+spy(System.A1)
+figure
+spy(System.A2)
+
 
 
 %test compose poses and addFactors

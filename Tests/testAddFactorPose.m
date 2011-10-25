@@ -41,7 +41,7 @@ SystemJ.b(SystemJ.ndx,1)=zeros(ConfigJ.PoseDim,1); % the pose will not be update
 
 ind=1;
 while ind<=Data.nEd
-
+    factorR=processEdgeData(Data.ed(ind,:),Data.obsType,GraphJ.idX);
     ConfigJ=addVariableConfig(factorR,ConfigJ,GraphJ.idX);
     SystemJ=addFactor(factorR,ConfigJ, SystemJ);
     GraphJ=addVarLinkToGraph(factorR,GraphJ);
@@ -59,9 +59,7 @@ SystemH.eta(SystemH.ndx,1)=zeros(ConfigH.PoseDim,1);
 
 ind=1;
 while ind<=Data.nEd
-    factorR.data=Data.ed(ind,:);
-    factorR=getDofRepresentation(factorR);
-    factorR=processFactor(factorR,GraphH.idX);
+    factorR=processEdgeData(Data.ed(ind,:),Data.obsType,GraphH.idX);
     ConfigH=addVariableConfig(factorR,ConfigH,GraphH.idX);
     SystemH=addFactor(factorR,ConfigH, SystemH);
     GraphH=addVarLinkToGraph(factorR,GraphH);
@@ -81,9 +79,7 @@ SystemL.d(SystemL.ndx,1)=zeros(ConfigL.PoseDim,1);
 
 ind=1;
 while ind<=Data.nEd
-    factorR.data=Data.ed(ind,:);
-    factorR=getDofRepresentation(factorR);
-    factorR=processFactor(factorR,GraphL.idX);
+    factorR=processEdgeData(Data.ed(ind,:),Data.obsType,GraphL.idX);
     ConfigL=addVariableConfig(factorR,ConfigL,GraphL.idX);
     SystemL=addFactor(factorR,ConfigL, SystemL);
     GraphL=addVarLinkToGraph(factorR,GraphL);

@@ -31,6 +31,9 @@ if strcmp(factorR.type,'pose')
     System.ndx=(System.ndx(end)+1):(System.ndx(end)+Config.PoseDim);
     System.Lambda(System.ndx,System.ndx)=zeros(Config.PoseDim,Config.PoseDim);
     System.eta(System.ndx,1) = zeros(Config.PoseDim,1);
+else
+    disp('loop closure')
+    
 end
 
 ndx=1:Config.PoseDim;
