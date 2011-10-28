@@ -12,7 +12,7 @@ close all;
 
 dataSet='VP';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=100; % steps to process, if '0', the whole data is processed 
+maxID=1000; % steps to process, if '0', the whole data is processed 
 
 pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
 Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);

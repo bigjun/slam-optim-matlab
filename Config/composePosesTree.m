@@ -41,15 +41,17 @@ while nl2
             if base
                 switch factorR.type
                     case {'pose','loopClosure'}
-                        factorR.origine=final;
-                        factorR.final=origine;
-                        factorR.measure=InvertEdgePose(factorR.measure')'; %(Data.edTree(s0,3:5)')';
-                        Config=addPose(factorR,Config);
+                        factorRtmp=factorR;
+                        factorRtmp.origine=factorR.final;
+                        factorRtmp.final=factorR.origine;
+                        factorRtmp.measure=InvertEdgePose(factorR.measure')'; %(Data.edTree(s0,3:5)')';
+                        Config=addPose(factorRtmp,Config);
                     case {'landmark','newLandmark'}
-                        factorR.origine=final;
-                        factorR.final=origine;
-                        factorR.measure=InvertEdgeLandmark(factorR.measure',Data.obsType,Config.PoseDim)';
-                        Config=addLandmark(factorR,Config);
+                        factorRtmp=factorR;
+                        factorRtmp.origine=factorR.final;
+                        factorRtmp.final=factorR.origine;
+                        factorRtmp.measure=InvertEdgeLandmark(factorR.measure',Data.obsType,Config.PoseDim)';
+                        Config=addLandmark(factorRtmp,Config);
                 end
                 % add to list1 and delete from list2
                 list1(len1+1) = s1;
