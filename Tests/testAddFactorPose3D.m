@@ -12,7 +12,7 @@ close all;
 
 dataSet='sphere';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=10; % steps to process, if '0', the whole data is processed 
+maxID=100; % steps to process, if '0', the whole data is processed 
 
 pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
 Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
@@ -21,6 +21,22 @@ Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 % Timing
 global Timing
 Timing.flag=0;
+
+%Plot
+%flags
+Plot.InitConfig=0;
+Plot.Config=1;
+Plot.Error=0;
+Plot.DMV=0;
+Plot.spyMat=0;
+Plot.measurement=1;
+
+
+%params 
+Plot.faxis='off';
+Plot.colour=[0.5,0.5,0.5];
+Plot.ftitle=Data.name;
+Plot.fname=sprintf('%s_',Data.name);
 
 % GRAPH
 % factors 
@@ -45,4 +61,4 @@ while ind<=Data.nEd
     ind=ind+1;
     
 end
-disp('done')
+PlotConfig(Plot,Config,Graph,'r','b');

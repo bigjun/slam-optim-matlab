@@ -49,18 +49,16 @@ for i=1:nEdges
             ndx1=[PoseDim*id2config((s1+1),1)+LandDim*id2config((s1+1),2)]+[1:dim];
             ndx2=[PoseDim*id2config((s2+1),1)+LandDim*id2config((s2+1),2)]+[1:dim];
             c=c1;
+            p1{i}=vector(ndx1,1); % The estimation of the two poses
+            p2{i}=vector(ndx2,1);
+            line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
         case {'landmark','newLandmark'}
             dim=LandDim;
             ndx1=[PoseDim*id2config((s1+1),1)+LandDim*id2config((s1+1),2)]+[1:dim];
             ndx2=[PoseDim*id2config((s2+1),1)+PoseDim+LandDim*id2config((s2+1),2)]+[1:dim]-LandDim;
             c=c2;
-    end
-    p1{i}=vector(ndx1,1); % The estimation of the two poses
-    p2{i}=vector(ndx2,1);
-    switch F(i).type
-        case {'pose','loopClosure'} 
-            line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
-        case {'landmark','newLandmark'}
+            p1{i}=vector(ndx1,1); % The estimation of the two poses
+            p2{i}=vector(ndx2,1);
             if plot_mesurements
                 %if i==nEdges
                 c='m';
@@ -68,7 +66,17 @@ for i=1:nEdges
                 %end
                 plot(p2{i}(1),p2{i}(2),'*','Color',c);
                 %line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
-            end
+            end  
+        case {'pose3D','loopClosure3D'}
+            dim=PoseDim;
+            ndx1=[PoseDim*id2config((s1+1),1)+LandDim*id2config((s1+1),2)]+[1:dim];
+            ndx2=[PoseDim*id2config((s2+1),1)+LandDim*id2config((s2+1),2)]+[1:dim];
+            c=c1;
+            p1{i}=vector(ndx1,1); % The estimation of the two poses
+            p2{i}=vector(ndx2,1);
+            line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],[p1{i}(3) p2{i}(3)],'Color',c); hold on;
+        case {'landmark3D','newLandmark3D'}
+            error('Plot 3D landmarks not implemented') % TODO implement plot 3D landmarks
             
     end
 end
