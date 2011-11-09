@@ -7,18 +7,26 @@ function Config=addLandmark(factorR,Config)
 s1=factorR.origine; % pose in the config
 s2=factorR.final; % new landmark
 
-switch factorR.obsType
-    case 'rb'
-        r=factorR.measure(1);
-        b=factorR.measure(2);
-        dxl=r*cos(b);
-        dyl=r*sin(b);
-    case 'dxdy'
-        dxl=factorR.measure(1);
-        dyl=factorR.measure(2);
+switch factorR.type
+    case 'landmark'
+        switch factorR.obsType
+            case 'rb'
+                r=factorR.measure(1);
+                b=factorR.measure(2);
+                dxl=r*cos(b);
+                dyl=r*sin(b);
+            case 'dxdy'
+                dxl=factorR.measure(1);
+                dyl=factorR.measure(2);
+            otherwise
+                error('unknown observation type');
+        end
+    case'landmark3D'
+        error('Add 3D landmark not implemented'); %TODO implement add 3D landmark
     otherwise
-        error('unknown observation type');
+        error('unknown factor type');
 end
+
 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim];
 
 P1=Config.vector(ndx1,1);

@@ -5,7 +5,7 @@ function Config=addVariableConfig(factorR,Config,idX)
 % Author: Viorela Ila
   
 switch factorR.type
-    case {'pose','loopClosure'} 
+    case {'pose','loopClosure','pose3D'} 
         if factorR.origine>factorR.final
             % in this case we need to invert the edge
             factorR.origine=final;
@@ -20,7 +20,7 @@ switch factorR.type
             error('Disconnected pose!!')
         end
         
-    case {'landmark','newLandmark'}
+    case {'landmark','newLandmark','landmark3D'}
         if (ismember(factorR.origine,idX))
             if~(ismember(factorR.final,idX))
                 Config=addLandmark(factorR,Config);

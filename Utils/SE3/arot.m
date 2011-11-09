@@ -13,6 +13,7 @@ function axis = arot(Q)
     end
        
     angle = acos(c);
+    
     if (angle ~= 0)
         % normalize axis
         factor = angle / (2 * sin(angle));

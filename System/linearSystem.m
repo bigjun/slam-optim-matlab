@@ -33,7 +33,7 @@ end
 for i=1:nObs
     factorR=Graph.F(i,:);
     switch factorR.type
-        case {'pose','loopClosure'}
+        case {'pose','loopClosure','pose3D','loopClosure3D'}
             switch System.type
                 case 'Hessian'
                     ck=cputime;
@@ -57,7 +57,7 @@ for i=1:nObs
                         Timing.addFactorCnt=Timing.addFactorCnt+1;
                     end
             end          
-        case {'landmark','newLandmark'}
+        case {'landmark','newLandmark','landmark3D','newLandmark3D'}
             switch System.type
                 case 'Hessian'
                     error('This method is not implemented')

@@ -2,19 +2,17 @@ function factorR=processEdgeData(dataEd,varargin)
 %factorR.data=Data.ed(ind,:);
 origine=dataEd(2);
 final=dataEd(1);
+
 % dof,type,representation
-if nargin>1
-    [dof,factorType,obsType,representation]=getDofRepresentation(dataEd,varargin{1});
-else
-    [dof,factorType,obsType,representation]=getDofRepresentation(dataEd);
-end
+[dof,factorType,representation]=getDofRepresentation(dataEd);
+
 switch factorType
     case 'pose'
         if origine>final
             % in this case we need to invert the edge
             factorR.origine=final;
             factorR.final=origine;
-            factorR.measure=InvertEdge(dataEd(3:5)')';
+            factorR.measure=InvertEdgePose(dataEd(3:5)')';
         else
             factorR.origine=origine;
             factorR.final=final;
@@ -23,8 +21,8 @@ switch factorType
         factorR.type='pose';
         if nargin>2
             idX=varargin{2};
-            if (ismember(origine,idX))
-                if(ismember(final,idX))
+            if (ismember(factorR.origine,idX))
+                if(ismember(factorR.final,idX))
                     factorR.type='loopClosure';
                 end
             else
@@ -37,15 +35,53 @@ switch factorType
         factorR.final=final;
         factorR.measure=dataEd(3:4);
         factorR.type='landmark';
+        switch nargin
+            case 2
+                obsType=varargin{1};
+            case 3
+                obsType=varargin{1};
+                idX=varargin{2};
+                if(ismember(final,idX))
+                    factorR.type='newLandmark';
+                end
+        end
+    case 'pose3D'
+        if origine>final
+            % in this case we need to invert the edge
+            factorR.origine=final;
+            factorR.final=origine;
+            factorR.measure=InvertEdgePose3D(dataEd(3:8)')';
+        else
+            factorR.origine=origine;
+            factorR.final=final;
+            factorR.measure=dataEd(3:8);
+        end
+        factorR.type='pose3D';
+        if nargin>2
+            idX=varargin{2};
+            if (ismember(factorR.origine,idX))
+                if(ismember(factorR.final,idX))
+                    factorR.type='loopClosure3D';
+                end
+            else
+                error('Disconnected graph!!')
+            end
+        end
+        
+    case 'landmark3D'
+        factorR.origine=origine;
+        factorR.final=final;
+        factorR.measure=dataEd(3:5);
+        factorR.type='landmark3D';
         if nargin>2
             idX=varargin{2};
             if(ismember(final,idX))
-                factorR.type='newLandmark';
+                factorR.type='newLandmark3D';
             end
         end
 end
 factorR.dof=dof;
-factorR.obsType=obsType;
+factorR.obsType=varargin{1};
 factorR.representation=representation;
 
 switch factorR.dof
@@ -57,7 +93,7 @@ switch factorR.dof
         factorR.R=chol(inv(factorR.Sz)); %S^(-1/2)
     case 6
         U = dataEd(10:end);
-        factorR.Sz=inv(sym_from_U(U, 6)); %TODO check if this is correct
+        factorR.Sz=inv(getCovFromData(U, 6)); %TODO check if this is correct
         factorR.R=chol(inv(factorR.Sz)); %S^(-1/2)
     otherwise
         error('Cannot process this data dof')

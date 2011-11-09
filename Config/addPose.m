@@ -10,17 +10,17 @@ s2=factorR.final; % new pose
 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim]; %Change this formula
 
 p1.config=Config.vector(ndx1,1);
-switch factorR.dof
-    case 3
+switch factorR.type
+    case 'pose'
         odo=factorR.measure;
         d=InvertEdge(odo');
         p2=Relative2Absolute(p1.config,d);
-    case 6
+    case 'pose3D'
         d=factorR.measure';
         p2=Relative2Absolute3D(p1.config,d); %TODO verify Relative2Absolute3D
 
     otherwise
-        error('Cannot add this data dof')
+        error('Cannot add this pose type')
 end
 
 % update Config

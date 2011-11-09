@@ -6,7 +6,7 @@ function [System,factorR]=addFactor( factorR, Config, System)
 % Author: Viorela Ila
 global Timing    
 switch factorR.type
-    case {'pose','loopClosure'}
+    case {'pose','loopClosure','pose3D'}
         switch System.type
             case 'Hessian'
                 System=addFactorPoseHessian(factorR,Config,System);
@@ -17,7 +17,7 @@ switch factorR.type
                 factorR.ndxA=System.ndx;
         end
 
-    case {'landmark','newLandmark'}
+    case {'landmark','newLandmark','landmark3D'}
         switch System.type
             case 'Hessian'
                 System=addFactorLandmarkHessian(factorR,Config,System);

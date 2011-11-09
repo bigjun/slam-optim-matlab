@@ -10,7 +10,7 @@ function Result=testNonlinearOptimization
 
 close all;
 
-dataSet='VP';
+dataSet='10K';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
 maxID=50; % steps to process, if '0', the whole data is processed 
 

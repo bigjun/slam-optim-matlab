@@ -1,4 +1,4 @@
-function[dof,factorType,obsType,representation]=getDofRepresentation(dataEd,varargin)
+function[dof,factorType,representation]=getDofRepresentation(dataEd,varargin)
 
 % TODO check al the datasets to be sure these are the only DOF possible
 
@@ -9,25 +9,21 @@ function[dof,factorType,obsType,representation]=getDofRepresentation(dataEd,vara
 
 if dataEd(end)==99999
     %landmark
-    factorType='landmark';
     if size(dataEd,2)>11
         dof=3;
+        factorType='landmark3D';
     else
         dof=2;
-    end
-    if nargin >1
-        obsType=varargin{1};
-    else
-        error('Specify the observation type');
+        factorType='landmark';
     end
 else
-    factorType='pose';
     if size(dataEd,2)>11
         dof=6;
+        factorType='pose3D';
     else
         dof=3;
+        factorType='pose';
     end
-    obsType='pose';
 end
 
 %Representation

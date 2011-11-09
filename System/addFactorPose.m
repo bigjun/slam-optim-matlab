@@ -14,8 +14,8 @@ ndx2=[Config.PoseDim*Config.id2config((s2+1),1)+Config.LandDim*Config.id2config(
 p1=Config.vector(ndx1,1); % The estimation of the two poses
 p2=Config.vector(ndx2,1);
 
-switch factorR.dof
-    case 3
+switch factorR.type
+    case {'pose','loopClosure'}
         % 2D case
         % % check for the order of ids and invert the transformation if needed
         if (s1>s2)
@@ -23,16 +23,26 @@ switch factorR.dof
             s1=factorR.final;
             s2=factorR.origine;
         else
-            z=InvertEdge(factorR.measure');
+            z=InvertEdgePose(factorR.measure');
         end
         h=Absolute2Relative(p1,p2); % Expectation
         [H1 H2]=Absolute2RelativeJacobian(p1,p2); % Jacobian
-        
-    case 6
+        d=z-h;
+        d(end)=pi2pi(d(end));
+    case {'pose3D','loopClosure3D'}
         % 3D case
-
+        if (s1>s2)
+            z=factorR.measure';
+            s1=factorR.final;
+            s2=factorR.origine;
+        else
+            z=InvertEdgepose3D(factorR.measure');
+        end
         h=Absolute2Relative3D(p1,p2); % Expectation
-        [H1 H2]=Absolute2Relative3DJacobian(p1,p2); % Jacobian
+        [H1 H2]=Absolute2RelativeJacobian3D(p1,p2); % Jacobian
+        d=z-h; % TODO implement smart minus!!
+    otherwise
+        error('This type of poseFactor is not implemented')
 end
 
 % Update System
@@ -49,8 +59,6 @@ end
 
 % right hand side
 ck=cputime;
-d=z-h;
-d(end)=pi2pi(d(end));
 System.b(System.ndx)=factorR.R*d; % Independent term
 if Timing.flag
     Timing.updateB=Timing.updateB+(cputime-ck);

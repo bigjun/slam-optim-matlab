@@ -22,8 +22,6 @@ Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 global Timing
 Timing.flag=0;
 
-
-
 % GRAPH
 % factors 
 Graph.F=[]; % keeps the factors
