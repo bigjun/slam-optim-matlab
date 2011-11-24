@@ -27,8 +27,9 @@ while ~done
     if Plot.Config, Config.all(:,i)=Config.vector(:,1); end;
     
     done=((norm(dm)<Solver.tol)||(i>=Solver.maxIT));
+    norm(dm)
     if ~done     
-        Config=newConfig2D(Config,dm);
+        Config=newConfig(Config,dm);
         ck=cputime;
         System=linearSystem(Config,Graph,System);
         if Timing.flag

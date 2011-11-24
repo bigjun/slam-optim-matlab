@@ -12,13 +12,13 @@ s1=factorR.origine;
 s2=factorR.final;
 
 % % check for the order of ids and invert the transformation if needed
-if (s1>s2)
+ if (s1>s2)
     z=factorR.measure';
     s1=factorR.final;
     s2=factorR.origine;
-else
-     z=InvertEdge(factorR.measure');
-end
+ else
+      z=InvertEdge(factorR.measure');
+ end
 
 ndx1=[Config.PoseDim*Config.id2config((s1+1),1)+Config.LandDim*Config.id2config((s1+1),2)]+[1:Config.PoseDim];
 ndx2=[Config.PoseDim*Config.id2config((s2+1),1)+Config.LandDim*Config.id2config((s2+1),2)]+[1:Config.PoseDim];

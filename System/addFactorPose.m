@@ -21,7 +21,8 @@ switch factorR.type
         if (s1>s2)
             z=factorR.measure';
             s1=factorR.final;
-            s2=factorR.origine;
+            s2=factorR.origine;   
+            disp('NO Invert!!!!!!!');
         else
             z=InvertEdgePose(factorR.measure');
         end
@@ -31,16 +32,16 @@ switch factorR.type
         d(end)=pi2pi(d(end));
     case {'pose3D','loopClosure3D'}
         % 3D case
-        if (s1>s2)
+         if (s1>s2)
             z=factorR.measure';
             s1=factorR.final;
             s2=factorR.origine;
-        else
-            z=InvertEdgepose3D(factorR.measure');
-        end
+         else
+             z=InvertEdgePose3D(factorR.measure');
+         end
         h=Absolute2Relative3D(p1,p2); % Expectation
         [H1 H2]=Absolute2RelativeJacobian3D(p1,p2); % Jacobian
-        d=z-h; % TODO implement smart minus!!
+        d=smartMinus(z,h); % the desplacement from h to z. 
     otherwise
         error('This type of poseFactor is not implemented')
 end

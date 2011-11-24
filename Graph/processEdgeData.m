@@ -1,5 +1,6 @@
 function factorR=processEdgeData(dataEd,varargin)
 %factorR.data=Data.ed(ind,:);
+
 origine=dataEd(2);
 final=dataEd(1);
 
@@ -50,11 +51,13 @@ switch factorType
             % in this case we need to invert the edge
             factorR.origine=final;
             factorR.final=origine;
-            factorR.measure=InvertEdgePose3D(dataEd(3:8)')';
+            factorR.measure=[dataEd(3:5),quaternion2Axis(dataEd(6:9))]; 
+            factorR.measure=InvertEdgePose3D(factorR.measure')'; 
+            %inverted
         else
             factorR.origine=origine;
             factorR.final=final;
-            factorR.measure=dataEd(3:8);
+            factorR.measure=[dataEd(3:5),quaternion2Axis(dataEd(6:9))]; 
         end
         factorR.type='pose3D';
         if nargin>2
@@ -81,7 +84,11 @@ switch factorType
         end
 end
 factorR.dof=dof;
-factorR.obsType=varargin{1};
+if nargin>1
+    factorR.obsType=varargin{1};
+else
+    factorR.obsType='pose';
+end
 factorR.representation=representation;
 
 switch factorR.dof

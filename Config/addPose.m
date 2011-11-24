@@ -13,11 +13,12 @@ p1.config=Config.vector(ndx1,1);
 switch factorR.type
     case 'pose'
         odo=factorR.measure;
-        d=InvertEdge(odo');
+        d=InvertEdgePose(odo');
         p2=Relative2Absolute(p1.config,d);
     case 'pose3D'
-        d=factorR.measure';
-        p2=Relative2Absolute3D(p1.config,d); %TODO verify Relative2Absolute3D
+        odo=factorR.measure;
+        d=InvertEdgePose3D(odo');
+        p2=Relative2Absolute3D(p1.config,d); 
 
     otherwise
         error('Cannot add this pose type')
