@@ -10,12 +10,13 @@ function Result=testAddFactorPose3D
 
 close all;
 
-dataSet='sphere';
+dataSet='rosace';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=80; % steps to process, if '0', the whole data is processed 
+maxID=0; % steps to process, if '0', the whole data is processed 
 
 pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
 Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
+%Data=getFake3DDataFrom2D(dataSet,pathToolbox,saveFile,maxID);
 Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 
 %plot vertices
@@ -79,7 +80,10 @@ while ind<=Data.nEd
     Graph=addVarLinkToGraph(factorR,Graph);
     ind=ind+1;
 end
-[Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot);
+%[Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot);
 
 
-PlotConfig(Plot,Config,Graph,'r','b');
+ PlotConfig(Plot,Config,Graph,'r','b');
+ grid;
+ axis equal
+ 

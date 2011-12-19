@@ -1,8 +1,8 @@
-function Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID)
+function Data=getDataFromFile(dataSet,dataPath,saveFile,maxID)
 
 % getDataFromFile
 % The script gets data from datafile and returns Data structure
-[vertices,edges]=loadDataSet(dataSet,pathToolbox,saveFile);
+[vertices,edges]=loadDataSet(dataSet,dataPath,saveFile);
 if strcmp(dataSet,'10KHOGMan')
     % Incremental feed for edges
     edges=sortrows(edges,[1,-2]); %TODO Change the dataset so that the edges come incrementaly

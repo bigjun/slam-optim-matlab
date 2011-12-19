@@ -10,16 +10,24 @@ function Result=testNonlinearOptimization
 
 close all;
 
-dataSet='10K';
-saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=50; % steps to process, if '0', the whole data is processed 
+switch 1
+    case 1
+        % ROSACE
+        dataSet='R1_2D';
+        dataPath='~/LAAS/datasets/Rosace';
+    case 0
+        % Others
+        dataSet='intel';
+        dataPath='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
+end
 
-pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
-Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
+saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
+maxID=0; % steps to process, if '0', the whole data is processed 
+Data=getDataFromFile(dataSet,dataPath,saveFile,maxID);
 Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 
 
-incremental=1; 
+incremental=0; 
 %representation='Hessian';
 representation='Jacobian';
 %representation='CholFactor';
@@ -110,44 +118,29 @@ end
 
 
 % GRAPH
-% factors 
 Graph.F=[]; % keeps the factors
-%variables
 Graph.idX=Data.vert(1,1); % the id in the variables in the graph
 
-if ~incremental    
-    % Build the system and initial configuration
-    [Config]=composePosesOdometry(Data,Config);
-    ind=1;
-    while ind<=Data.nEd
-        factorR=processEdgeData(Data.ed(ind,:),Data.obsType,Graph.idX);
-        System=addFactor(factorR,Config,System);
-        Graph=addVarLinkToGraph(factorR,Graph);
-        ind=ind+1;
-    end
-    Result.initConfig=Config;
-    % plot initial config
-    if Plot.InitConfig
-        PlotConfig(Plot,Config,Graph,'g','y');
-    end
-    % OPTIMIZE
-    [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot); 
-else
-    ind=1;
-    while ind<=Data.nEd
-        factorR=processEdgeData(Data.ed(ind,:),Data.obsType,Graph.idX);
-        Config=addVariableConfig(factorR,Config,Graph.idX);
-        System=addFactor(factorR,Config,System);
-        Graph=addVarLinkToGraph(factorR,Graph);
+%[Config]=composePosesOdometry(Data,Config);
+
+ind=1;
+while ind<=Data.nEd
+    factorR=processEdgeData(Data.ed(ind,:),Data.obsType,Graph.idX);
+    Config=addVariableConfig(factorR,Config,Graph.idX);
+    System=addFactor(factorR,Config,System);
+    Graph=addVarLinkToGraph(factorR,Graph);
+    if incremental
         [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot);
-        ind=ind+1;
-        
     end
+    ind=ind+1;
+    
+end
+
+if ~incremental
+    [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot);
 end
 
 % Timing
-
-
 switch representation
     case 'CholFactor'
         Timing.updateL=Timing.updateL/Timing.updateLcnt;
@@ -161,7 +154,6 @@ switch representation
     otherwise
         error('This state representation is not implemented');
 end
-
 
 
 Timing.linearSolver=Timing.linearSolver/Timing.linearSolverCnt;

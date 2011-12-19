@@ -27,7 +27,7 @@ while ~done
     if Plot.Config, Config.all(:,i)=Config.vector(:,1); end;
     
     done=((norm(dm)<Solver.tol)||(i>=Solver.maxIT));
-    norm(dm)
+    %norm(dm)
     if ~done     
         Config=newConfig(Config,dm);
         ck=cputime;
@@ -47,7 +47,6 @@ end
 
 
 fprintf('itterations %d\n',i);
-
 
 if Plot.Error,Config.all_error=Config.all_error(1:i);
 else Config.all_error(i)=computeError(System,dm);%/norm(b);

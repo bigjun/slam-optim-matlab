@@ -1,4 +1,4 @@
-function[dof,factorType,representation]=getDofRepresentation(dataEd,varargin)
+function[dof,factorType,rotRep]=getDofRepresentation(dataEd)
 
 % TODO check al the datasets to be sure these are the only DOF possible
 
@@ -20,15 +20,20 @@ else
     if size(dataEd,2)>11
         dof=6;
         factorType='pose3D';
+
     else
         dof=3;
         factorType='pose';
     end
 end
 
-%Representation
-if size(dataEd,2)==30
-    representation='quaternion';
-else
-    representation='Euler';
+%Rotation representation
+sizeEd=size(dataEd,2);
+switch sizeEd
+    case 11
+        rotRep='yaw';
+    case 30
+        rotRep='quaternion';
+    case 29
+        rotRep='axis';
 end

@@ -19,10 +19,7 @@ switch factorR.type
         % 2D case
         % % check for the order of ids and invert the transformation if needed
         if (s1>s2)
-            z=factorR.measure';
-            s1=factorR.final;
-            s2=factorR.origine;   
-            disp('NO Invert!!!!!!!');
+            z=factorR.measure'; 
         else
             z=InvertEdgePose(factorR.measure');
         end
@@ -32,16 +29,14 @@ switch factorR.type
         d(end)=pi2pi(d(end));
     case {'pose3D','loopClosure3D'}
         % 3D case
-         if (s1>s2)
+        if (s1>s2)
             z=factorR.measure';
-            s1=factorR.final;
-            s2=factorR.origine;
-         else
-             z=InvertEdgePose3D(factorR.measure');
-         end
+        else
+            z=InvertEdgePose3D(factorR.measure');
+        end
         h=Absolute2Relative3D(p1,p2); % Expectation
         [H1 H2]=Absolute2RelativeJacobian3D(p1,p2); % Jacobian
-        d=smartMinus(z,h); % the desplacement from h to z. 
+        d=smartMinus(h,z); %(implements z-h on manifold)
     otherwise
         error('This type of poseFactor is not implemented')
 end

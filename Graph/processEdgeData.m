@@ -5,7 +5,7 @@ origine=dataEd(2);
 final=dataEd(1);
 
 % dof,type,representation
-[dof,factorType,representation]=getDofRepresentation(dataEd);
+[dof,factorType,rotRep]=getDofRepresentation(dataEd);
 
 switch factorType
     case 'pose'
@@ -46,19 +46,34 @@ switch factorType
                     factorR.type='newLandmark';
                 end
         end
-    case 'pose3D'
+    case 'pose3D'      
         if origine>final
             % in this case we need to invert the edge
             factorR.origine=final;
             factorR.final=origine;
-            factorR.measure=[dataEd(3:5),quaternion2Axis(dataEd(6:9))]; 
-            factorR.measure=InvertEdgePose3D(factorR.measure')'; 
+            switch rotRep
+                case 'quaternion'
+                    factorR.measure=[dataEd(3:5),quaternion2Axis(dataEd(6:9))];
+                case 'axis'
+                    factorR.measure=dataEd(3:8);
+                otherwise
+                    error('This 3D representation is not implemented');
+            end
+            factorR.measure=InvertEdgePose3D(factorR.measure')';
             %inverted
         else
             factorR.origine=origine;
             factorR.final=final;
-            factorR.measure=[dataEd(3:5),quaternion2Axis(dataEd(6:9))]; 
+            switch rotRep
+                case 'quaternion'
+                    factorR.measure=[dataEd(3:5),quaternion2Axis(dataEd(6:9))];
+                case 'axis'
+                    factorR.measure=dataEd(3:8);
+                otherwise
+                    error('This 3D representation is not implemented');
+            end
         end
+
         factorR.type='pose3D';
         if nargin>2
             idX=varargin{2};
@@ -89,7 +104,7 @@ if nargin>1
 else
     factorR.obsType='pose';
 end
-factorR.representation=representation;
+factorR.representation=rotRep;
 
 switch factorR.dof
     case 2
@@ -99,7 +114,7 @@ switch factorR.dof
         factorR.Sz=diag([1/dataEd(6);1/dataEd(8);1/dataEd(9)]); % only diag cov.
         factorR.R=chol(inv(factorR.Sz)); %S^(-1/2)
     case 6
-        U = dataEd(10:end);
+        U = dataEd(end-20:end);
         factorR.Sz=inv(getCovFromData(U, 6)); %TODO check if this is correct
         factorR.R=chol(inv(factorR.Sz)); %S^(-1/2)
     otherwise

@@ -8,7 +8,7 @@ function PlotConfig(varargin)
 %       PlotConfig(plot_mesurements,config,factors,id2config,poseDim,color1,landDim,color2);
 % Returns the relinearized system: System
 % Author: Viorela Ila
-
+disp('Plotting ...');
 if isstruct(varargin{1})&& isstruct(varargin{2})
     Plot=varargin{1};
     Config=varargin{2};
@@ -67,7 +67,7 @@ for i=1:nEdges
                 plot(p2{i}(1),p2{i}(2),'*','Color',c);
                 %line([p1{i}(1) p2{i}(1)],[p1{i}(2) p2{i}(2)],'Color',c); hold on;
             end  
-        case {'pose3D'}%,'loopClosure3D'}
+        case {'pose3D','loopClosure3D'}
             dim=PoseDim;
             ndx1=[PoseDim*id2config((s1+1),1)+LandDim*id2config((s1+1),2)]+[1:dim];
             ndx2=[PoseDim*id2config((s2+1),1)+LandDim*id2config((s2+1),2)]+[1:dim];

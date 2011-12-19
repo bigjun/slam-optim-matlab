@@ -10,9 +10,9 @@ function Result=testAddFactorPose
 
 close all;
 
-dataSet='10K';
+dataSet='rosace2D';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=100; % steps to process, if '0', the whole data is processed 
+maxID=0; % steps to process, if '0', the whole data is processed 
 
 pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
 Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);

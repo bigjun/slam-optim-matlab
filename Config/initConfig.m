@@ -3,20 +3,27 @@ function Config=initConfig(Data)
 % get the pose and landmark DOF
 isLandmark=find(Data.ed(:,end)==99999);
 if isLandmark
-    dofL=getDofRepresentation(Data.ed(isLandmark(1),:));
+    [dofL,factorType,rotRep]=getDofRepresentation(Data.ed(isLandmark(1),:));
     Config.LandDim=dofL;   % landmark size
     dofP=getDofRepresentation(Data.ed(1,:));
     Config.PoseDim=dofP;   % pose size
 else
-    dofP=getDofRepresentation(Data.ed(1,:));
+    [dofP,factorType,rotRep]=getDofRepresentation(Data.ed(1,:));
     Config.PoseDim=dofP;   % pose size
     Config.LandDim=0;
 end
 if Config.PoseDim >3
-    et=Data.vert(1,2:4)';
-    eq=Data.vert(1,5:end)';
-    Config.p0 = [et;arot(q2R(eq))];
-    U = Data.ed(1,10:end);
+    switch rotRep
+        case 'quaternion'
+            et=Data.vert(1,2:4)';
+            eq=Data.vert(1,5:end)';
+            Config.p0 = [et;arot(q2R(eq))];
+        case 'axis'
+            Config.p0 =Data.vert(1,2:end)';
+        otherwise
+            error('This 3D representation is not implemented');
+    end
+    U = Data.ed(1,end-20:end);
     Config.s0 = inv(getCovFromData(U, 6)); % TODO chec if this cov need to be transformed to cov of axix
 else
     Config.p0 = Data.vert(1,2:end)'; % prior

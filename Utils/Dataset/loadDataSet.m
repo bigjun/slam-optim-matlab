@@ -18,6 +18,20 @@ switch dataSet
         dataFileGraph = [dataPath,'/VP.graph'];
     case 'sphere'
         dataFileGraph = [dataPath,'/sphere.graph'];
+    case 'parking'
+        dataFileGraph = [dataPath,'/parking.graph'];
+    case 'R1_2D'
+        dataFileGraph = [dataPath,'/R1_2D.graph'];
+    case 'R1_3D'
+        dataFileGraph = [dataPath,'/R1_3D.graph'];
+    case 'R2_2D'
+        dataFileGraph = [dataPath,'/R2_2D.graph'];
+    case 'R2_3D'
+        dataFileGraph = [dataPath,'/R2_3D.graph'];
+    case 'R3_2D'
+        dataFileGraph = [dataPath,'/R3_2D.graph'];
+    case 'R3_3D'
+        dataFileGraph = [dataPath,'/R3_3D.graph'];
     otherwise
         error('%s Dataset does not exist!',dataSet);
 end
