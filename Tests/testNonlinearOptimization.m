@@ -126,7 +126,7 @@ Graph.idX=Data.vert(1,1); % the id in the variables in the graph
 ind=1;
 while ind<=Data.nEd
     factorR=processEdgeData(Data.ed(ind,:),Data.obsType,Graph.idX);
-    Config=addVariableConfig(factorR,Config,Graph.idX);
+    Config=addVariableConfig(factorR,Config);
     System=addFactor(factorR,Config,System);
     Graph=addVarLinkToGraph(factorR,Graph);
     if incremental

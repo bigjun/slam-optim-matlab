@@ -25,7 +25,6 @@ switch factorType
             if (ismember(factorR.origine,idX))
                 if(ismember(factorR.final,idX))
                     factorR.type='loopClosure';
-                    disp('LOOP CLOSURE')
                 end
             else
                 error('Disconnected graph!!')

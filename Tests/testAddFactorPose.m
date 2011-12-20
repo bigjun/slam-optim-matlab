@@ -10,9 +10,9 @@ function Result=testAddFactorPose
 
 close all;
 
-dataSet='rosace2D';
+dataSet='10K';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=0; % steps to process, if '0', the whole data is processed 
+maxID=100; % steps to process, if '0', the whole data is processed 
 
 pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
 Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
@@ -40,7 +40,7 @@ SystemJ.b(SystemJ.ndx,1)=zeros(ConfigJ.PoseDim,1); % the pose will not be update
 ind=1;
 while ind<=Data.nEd
     factorR=processEdgeData(Data.ed(ind,:),Data.obsType,GraphJ.idX);
-    ConfigJ=addVariableConfig(factorR,ConfigJ,GraphJ.idX);
+    ConfigJ=addVariableConfig(factorR,ConfigJ);
     SystemJ=addFactor(factorR,ConfigJ, SystemJ);
     GraphJ=addVarLinkToGraph(factorR,GraphJ);
     ind=ind+1;
@@ -58,7 +58,7 @@ SystemH.eta(SystemH.ndx,1)=zeros(ConfigH.PoseDim,1);
 ind=1;
 while ind<=Data.nEd
     factorR=processEdgeData(Data.ed(ind,:),Data.obsType,GraphH.idX);
-    ConfigH=addVariableConfig(factorR,ConfigH,GraphH.idX);
+    ConfigH=addVariableConfig(factorR,ConfigH);
     SystemH=addFactor(factorR,ConfigH, SystemH);
     GraphH=addVarLinkToGraph(factorR,GraphH);
     ind=ind+1;
@@ -78,7 +78,7 @@ SystemL.d(SystemL.ndx,1)=zeros(ConfigL.PoseDim,1);
 ind=1;
 while ind<=Data.nEd
     factorR=processEdgeData(Data.ed(ind,:),Data.obsType,GraphL.idX);
-    ConfigL=addVariableConfig(factorR,ConfigL,GraphL.idX);
+    ConfigL=addVariableConfig(factorR,ConfigL);
     SystemL=addFactor(factorR,ConfigL, SystemL);
     GraphL=addVarLinkToGraph(factorR,GraphL);
     ind=ind+1;

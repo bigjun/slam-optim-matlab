@@ -12,7 +12,7 @@ idX=Data.vert(1,1);
 ind=1;
 while ind<Data.nEd
     factorR=processEdgeData(Data.ed(ind,:),Data.obsType,idX);
-    Config=addVariableConfig(factorR,Config,idX);
+    Config=addVariableConfig(factorR,Config);
     idX=[idX;factorR.final];
     ind=ind+1;
 end

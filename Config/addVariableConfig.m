@@ -1,4 +1,4 @@
-function Config=addVariableConfig(factorR,Config,idX)
+function Config=addVariableConfig(factorR,Config)
 
 % Config=addVariableConfig(factorR,Config,Graph)
 % It adds the variable to the Config if it is not in the Graph.idX
@@ -20,20 +20,28 @@ switch factorR.type
                     factorR.measure=InvertEdgePose3D(factorR.measure')';
             end
         end
-        if (ismember(factorR.origine,idX))
-            if~(ismember(factorR.final,idX))
-                Config=addPose(factorR,Config);
-            end
-        else
-            error('Disconnected pose!!')
+        if strcmp(factorR.type,'pose')||strcmp(factorR.type,'pose3D')
+            Config=addPose(factorR,Config);
         end
         
+%         if (ismember(factorR.origine,idX))
+%             if~(ismember(factorR.final,idX))
+%                 Config=addPose(factorR,Config);
+%             end
+%         else
+%             error('Disconnected pose!!')
+%         end
+        
     case {'landmark','newLandmark','landmark3D'}
-        if (ismember(factorR.origine,idX))
-            if~(ismember(factorR.final,idX))
-                Config=addLandmark(factorR,Config);
-            end
-        else
-            error('Disconnected landmark!!')
+        if strcmp(factorR.type,'newLandmark')||strcmp(factorR.type,'newLandmark3D')
+            Config=addLandmark(factorR,Config);
         end
+%         if (ismember(factorR.origine,idX))
+%             if~(ismember(factorR.final,idX))
+%                 Config=addLandmark(factorR,Config);
+%             end
+%         else
+%             error('Disconnected landmark!!')
+%         end
 end
+
