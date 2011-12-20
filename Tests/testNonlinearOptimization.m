@@ -10,19 +10,19 @@ function Result=testNonlinearOptimization
 
 close all;
 
-switch 1
+switch 0
     case 1
         % ROSACE
         dataSet='R1_2D';
         dataPath='~/LAAS/datasets/Rosace';
     case 0
         % Others
-        dataSet='intel';
+        dataSet='VP';
         dataPath='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
 end
 
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=0; % steps to process, if '0', the whole data is processed 
+maxID=100; % steps to process, if '0', the whole data is processed 
 Data=getDataFromFile(dataSet,dataPath,saveFile,maxID);
 Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 

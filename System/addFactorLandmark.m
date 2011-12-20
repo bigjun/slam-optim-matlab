@@ -17,6 +17,8 @@ P1=Config.vector(ndx1); % The estimation of the two poses
 pt=Config.vector(ndx2);
 
 
+%TODO check if adding new landmark works good!!!!
+
 switch factorR.obsType
     case 'rb'
         h=AbsolutePoint2RBObs(P1,pt); % Expectation
@@ -34,7 +36,7 @@ end
 
 % Update System
 
-System.ndx=System.ndx(end)+1:System.ndx(end)+Config.LandDim;
+System.ndx=(System.ndx(end)+1):(System.ndx(end)+Config.LandDim);
 System.A(System.ndx,ndx1)=sparse2(factorR.R*H1); % Jacobian matrix
 System.A(System.ndx,ndx2)=sparse2(factorR.R*H2);
 

@@ -8,7 +8,7 @@ s1=factorR.origine; % pose in the config
 s2=factorR.final; % new landmark
 
 switch factorR.type
-    case 'landmark'
+    case {'landmark','newLandmark'}
         switch factorR.obsType
             case 'rb'
                 r=factorR.measure(1);
@@ -21,7 +21,7 @@ switch factorR.type
             otherwise
                 error('unknown observation type');
         end
-    case'landmark3D'
+    case{'landmark3D','newLandmark3D'}
         error('Add 3D landmark not implemented'); %TODO implement add 3D landmark
     otherwise
         error('unknown factor type');

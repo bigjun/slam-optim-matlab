@@ -25,6 +25,7 @@ switch factorType
             if (ismember(factorR.origine,idX))
                 if(ismember(factorR.final,idX))
                     factorR.type='loopClosure';
+                    disp('LOOP CLOSURE')
                 end
             else
                 error('Disconnected graph!!')
@@ -42,7 +43,7 @@ switch factorType
             case 3
                 obsType=varargin{1};
                 idX=varargin{2};
-                if(ismember(final,idX))
+                if ~(ismember(final,idX))
                     factorR.type='newLandmark';
                 end
         end
@@ -93,7 +94,8 @@ switch factorType
         factorR.type='landmark3D';
         if nargin>2
             idX=varargin{2};
-            if(ismember(final,idX))
+            %TODO check if new landmark
+            if ~(ismember(final,idX))
                 factorR.type='newLandmark3D';
             end
         end

@@ -43,7 +43,7 @@ end
 
 % Update System
 
-System.ndx=System.ndx(end)+1:System.ndx(end)+Config.PoseDim;
+System.ndx=(System.ndx(end)+1):(System.ndx(end)+Config.PoseDim);
 
 ck=cputime;
 System.A(System.ndx,ndx1)=sparse2(factorR.R*H1); % Jacobian matrix

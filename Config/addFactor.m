@@ -17,7 +17,7 @@ switch factorR.type
                 factorR.ndxA=System.ndx;
         end
 
-    case {'landmark','newLandmark','landmark3D'}
+    case {'landmark','newLandmark','landmark3D','newLandmark3D'}
         switch System.type
             case 'Hessian'
                 System=addFactorLandmarkHessian(factorR,Config,System);
