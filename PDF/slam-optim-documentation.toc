@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {2}Mathematical background}{2}
+\contentsline {subsection}{\numberline {2.1}Factor graph formulation}{2}
+\contentsline {subsection}{\numberline {2.2}Maximum likelihood estimation}{3}
+\contentsline {subsection}{\numberline {2.3}Least-squares problem}{3}
+\contentsline {subsection}{\numberline {2.4}Solving the SLAM problem}{4}
+\contentsline {subsection}{\numberline {2.5}New method to incrementally update the Cholesky factor}{5}
+\contentsline {subsection}{\numberline {2.6}Optimization on Manifold}{6}
+\contentsline {section}{\numberline {3}Implementation Details}{6}
+\contentsline {subsection}{\numberline {3.1}Nonlinear optimization}{6}

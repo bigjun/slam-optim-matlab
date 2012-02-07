@@ -1,38 +1,33 @@
-function Result=testNonlinearOptimization
+function Result=testNonlinearOptimization(dataSet,dataPath)
 
 % testNonlinearOptimization
 % The script applyes nonlinear optimization to a Graph SLAM problem
 % The test can be applied to any of the datasets in the ./Data folder 
 % '10K', '10KHOGMan','intel','Killian', 'VP'
+%
+% Examples of how to call the function:
+% Result=testNonlinearOptimization('R1_2D','~/LAAS/datasets/Rosace')
+% Result=testNonlinearOptimization('10K','~/LAAS/matlab/slam-optim-matlab/Data')
+%
 % The user can choose to either incrementaly optimize the graph or to
 % optimize the whole graph at once(batch)
+%
 % Author: Viorela Ila
 
 close all;
+%--------------------------------------------------------------------------
+% PARAMETERS
 
-switch 0
-    case 1
-        % ROSACE
-        dataSet='R1_2D';
-        dataPath='~/LAAS/datasets/Rosace';
-    case 0
-        % Others
-        dataSet='VP';
-        dataPath='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
-end
-
+incremental=0;% Incremental or batch
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=100; % steps to process, if '0', the whole data is processed 
-Data=getDataFromFile(dataSet,dataPath,saveFile,maxID);
-Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
+maxID=0; % steps to process, if '0', the whole data is processed 
+obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 
 
-incremental=0; 
 %representation='Hessian';
 representation='Jacobian';
 %representation='CholFactor';
 
-% Timing
 global Timing
 Timing.flag=1;
 if Timing.flag
@@ -65,9 +60,8 @@ if Timing.flag
     Timing.addFactorCnt=1;
 end
 
-% PARAMETERS
+% SOLVER 
 
-%Solver
 Solver.maxIT=100;
 Solver.tol=1e-4;
 Solver.linearSolver='spqr';
@@ -78,30 +72,35 @@ Solver.linearTime=0;
 Solver.linearizationTime=0;
 Solver.nonlinearTime=0;
 
-%Plot
+% PLOT
 %flags
-Plot.InitConfig=0;
+Plot.InitConfig=1;
 Plot.Config=1;
 Plot.Error=0;
 Plot.DMV=0;
 Plot.spyMat=0;
 Plot.measurement=1;
-
-
 %params 
 Plot.faxis='off';
 Plot.colour=[0.5,0.5,0.5];
-Plot.ftitle=Data.name;
-Plot.fname=sprintf('%s_',Data.name);
 
+%--------------------------------------------------------------------------
+% INITIALIZATION
 
-%CONFIG
+% DATA
+Data=getDataFromFile(dataSet,dataPath,saveFile,maxID);
+Data.obsType=obsType;
+
+% CONFIG
 Config=initConfig(Data);
 
-
-%SYSTEM
+% SYSTEM
 System.type= representation;
 System.ndx=1:Config.PoseDim;
+
+% GRAPH
+Graph.F=[]; % keeps the factors
+Graph.idX=Data.vert(1,1); % the id in the variables in the graph
 
 
 R0=chol(inv(Config.s0));
@@ -116,10 +115,8 @@ else
     System.b(System.ndx,1)=zeros(Config.PoseDim,1); % the pose will not be updated
 end
 
-
-% GRAPH
-Graph.F=[]; % keeps the factors
-Graph.idX=Data.vert(1,1); % the id in the variables in the graph
+%--------------------------------------------------------------------------
+% OPTIMIZATION
 
 %[Config]=composePosesOdometry(Data,Config);
 
@@ -137,9 +134,16 @@ while ind<=Data.nEd
 end
 
 if ~incremental
+    if Plot.InitConfig
+        % plot final config and errors
+        Plot.fname=sprintf('%s_',Data.name);
+        Plot.ftitle=Data.name;
+        PlotConfig(Plot,Config,Graph,'r','b');
+    end
     [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot);
 end
 
+%--------------------------------------------------------------------------
 % Timing
 switch representation
     case 'CholFactor'
@@ -159,9 +163,9 @@ end
 Timing.linearSolver=Timing.linearSolver/Timing.linearSolverCnt;
 Timing.linearization=Timing.linearization/Timing.linearizationCnt;
 Timing.addFactor=Timing.addFactor/Timing.addFactorCnt;
+%--------------------------------------------------------------------------
 
-
-% Just for Debug%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Just for Debug
     
 % switch representation
 %     case 'CholFactor'
@@ -181,15 +185,13 @@ Timing.addFactor=Timing.addFactor/Timing.addFactorCnt;
 % Timing_linearization=Timing.linearization
 % Timing_addFactor=Timing.addFactor
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-Result.Config=Config;
-Result.System=System;
-Result.Graph=Graph;
-Result.Plot=Plot;
-Result.Timing=Timing;
+%--------------------------------------------------------------------------
+% PLOT
 % plot final config and errors
+Plot.fname=sprintf('%s_',Data.name);
+Plot.ftitle=Data.name;
 PlotConfig(Plot,Config,Graph,'r','b');
+
 if Plot.DMV
     figure
     plot(Config.dmv)
@@ -201,3 +203,10 @@ if Plot.Error
     title('Error');
     
 end
+
+
+Result.Config=Config;
+Result.System=System;
+Result.Graph=Graph;
+Result.Plot=Plot;
+Result.Timing=Timing;
