@@ -1,4 +1,4 @@
-function Result=testNonlinearOptimization(dataSet,dataPath)
+function Result=testNonlinearOptimization(varargin)
 
 % testNonlinearOptimization
 % The script applyes nonlinear optimization to a Graph SLAM problem
@@ -17,10 +17,27 @@ function Result=testNonlinearOptimization(dataSet,dataPath)
 close all;
 %--------------------------------------------------------------------------
 % PARAMETERS
+switch nargin
+    case 0
+        dataSet='10K';
+        dataPath='./Data';
+        maxID=100;% steps to process, if '0', the whole data is processed 
+    case 1
+        dataSet=varargin{1};
+        dataPath='./Data';
+        maxID=100;% steps to process, if '0', the whole data is processed 
+    case 2
+        dataSet=varargin{1};
+        dataPath=varargin{2};
+        maxID=100;% steps to process, if '0', the whole data is processed 
+    case 3
+        dataSet=varargin{1};
+        dataPath=varargin{2};
+        maxID=varargin{3};% steps to process, if '0', the whole data is processed 
+end
 
 incremental=0;% Incremental or batch
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=0; % steps to process, if '0', the whole data is processed 
 obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 
 
@@ -138,7 +155,7 @@ if ~incremental
         % plot final config and errors
         Plot.fname=sprintf('%s_',Data.name);
         Plot.ftitle=Data.name;
-        PlotConfig(Plot,Config,Graph,'r','b');
+        PlotConfig(Plot,Config,Graph,'g','y');
     end
     [Config, System]=nonlinearOptimization(Config,System,Graph,Solver,Plot);
 end

@@ -1,6 +1,0 @@
-/* Created by mdot for Matlab */
-digraph m2html {
-
-  CG [URL="CG.html"];
-  SPCG [URL="SPCG.html"];
-}
