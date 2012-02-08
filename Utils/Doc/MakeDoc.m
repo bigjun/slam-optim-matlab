@@ -15,9 +15,9 @@ if isunix || ismac
     % Remove the previous documentation if any
     eval('!rm -rf Doc');
     % generate the new documentation
-    m2html('mfiles','.','htmldir','Doc','recursive','on','global','on','template','frame','index','menu','graph','on','todo','on');
+    m2html('mfiles','.','htmldir','GeneratedDoc','recursive','on','global','on','template','frame','index','menu','graph','on','todo','on');
     %
-    eval('!sed -e ''s/\.\.\///g'' -i Doc/*.html');
+    eval('!sed -e ''s/\.\.\///g'' -i GeneratedDoc/*.html');
   else
     error('m2html is not in the path');
   end

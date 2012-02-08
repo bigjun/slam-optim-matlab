@@ -63,11 +63,9 @@
 This toolbox implements deferent optimization strategies to solve the simultaneous localization and mapping (SLAM) problem. This is needed to enable autonomous robots to localize, map and navigate previously unknown environments. This work considers smoothing rather than filtering. The advantage is that the estimation errors are reduced by using 
 better linearization points. Both, \emph{pose SLAM} (smoothing the robot's trajectory only) and \emph{full SLAM} (estimating the trajectory together with landmarks in the environment) are considered. The user can also chose between \emph{batch} and \emph{incremental} optimization. 
 \\
-The purpose of the toolbox is to test the mathematics behind the smoothing and mapping 
+The purpose of the toolbox is to test the mathematics behind the smoothing and mapping algorithms. It is not optimized for speed but still timing of the algorithms is available so that the user can compare different solvers and/or state representations.
 \\
 The toolbox is available here\\ {\small {\url{https://wiki.laas.fr/robots/ViorelaIla?action=AttachFile&do=view&target=SAMToolbox.tar.gz}}\\ \normalsize It includes three implementations for incremental online smoothing and mapping; a new method of incremental Cholesky updates (called \emph{ L-SLAM}) together with QR factorization of the matrix $A$ (which in the SLAM literature is known as SAM, smoothing and mapping \cite{Dellaert06ijrr}) and the Cholesky decomposition of the matrix $\Lambda$ (based on incremental updates of $\Lambda$ from \cite{Ila10tro}).
-
-
 
 
 % If the chapter ends in an odd page, you may want to skip having the page

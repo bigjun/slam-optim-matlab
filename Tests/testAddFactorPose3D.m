@@ -1,4 +1,4 @@
-function Result=testAddFactorPose3D
+function Result=testAddFactorPose3D(varargin)
 
 % testAddFactorPose3D
 % The script applyes nonlinear optimization to a Graph SLAM problem
@@ -10,12 +10,28 @@ function Result=testAddFactorPose3D
 
 close all;
 
-dataSet='rosace';
-saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=0; % steps to process, if '0', the whole data is processed 
+% PARAMETERS
+switch nargin
+    case 0
+        dataSet='sphere';
+        dataPath='./Data';
+        maxID=100;% steps to process, if '0', the whole data is processed 
+    case 1
+        dataSet=varargin{1};
+        dataPath='./Data';
+        maxID=100;% steps to process, if '0', the whole data is processed 
+    case 2
+        dataSet=varargin{1};
+        dataPath=varargin{2};
+        maxID=100;% steps to process, if '0', the whole data is processed 
+    case 3
+        dataSet=varargin{1};
+        dataPath=varargin{2};
+        maxID=varargin{3};% steps to process, if '0', the whole data is processed 
+end
 
-pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
-Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
+saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
+Data=getDataFromFile(dataSet,dataPath,saveFile,maxID);
 %Data=getFake3DDataFrom2D(dataSet,pathToolbox,saveFile,maxID);
 Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 
