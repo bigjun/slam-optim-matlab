@@ -19,8 +19,15 @@ disp('[4] iSAM: Incremental Smoothing and Mapping, M. Kaess, A. Ranganathan, and
 disp(' ');
 disp('     The toolbox requires Tim Davis SuiteSparse toolbox which can be downloaded from here: ');
 disp('                     http://www.cise.ufl.edu/research/sparse/SuiteSparse/');
+disp('                         Place the SuiteSparse in ~/SuiteSparse folder');
 disp(' ');
-disp('                                    Author: Viorela Ila');
+disp('                     To test the toolbox just run: testNonlinearOptimization');
+disp('      After, you can edit testNonlinearOptimization and change the parameters to test more options  ');
+disp(' ');
+disp(' ');
+disp('                                                 ENJOY!!');
+disp(' ');
+disp('                                          Author: Viorela Ila');
 
 SuiteSparsePath_ela='~/Work_mac/code/SuiteSparse';
 SuiteSparsePath_others='~/SuiteSparse';
