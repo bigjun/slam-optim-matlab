@@ -51,7 +51,7 @@ Omega=H'*iSz*H;
 L22 = System.L(ndx1(1):ndx2(end),ndx1(1):ndx2(end)) ;
 L22_new=(chol(L22*L22'+Omega))';
 System.L(ndx1(1):ndx2(end),ndx1(1):ndx2(end))  = L22_new;
-System.L = chol_update(System.L,factorR.R*H); 
+System.L = chol_update(System.L,factorR.R*H); %TODO test if it's working
 
 % update d
 d2 = System.d(ndx1(1):ndx2(end),1);

@@ -26,8 +26,15 @@ if Config.PoseDim >3
     U = Data.ed(1,end-20:end);
     Config.s0 = inv(getCovFromData(U, 6)); % TODO chec if this cov need to be transformed to cov of axix
 else
-    Config.p0 = Data.vert(1,2:end)'; % prior
-    Config.s0 = diag([Data.ed(1,6),Data.ed(1,8),Data.ed(1,9)]); % noise on prio
+    [isId,IdP]=ismember(Data.ed(1,2),Data.vert(:,1));
+    if isId
+        Config.IdPose1=Data.vert(IdP,1);
+        Config.p0 = Data.vert(IdP,2:end)'; % prior
+        
+        Config.s0 = diag([Data.ed(1,6),Data.ed(1,8),Data.ed(1,9)]); % noise on prio
+    else
+        error('Vertex not in the vertices list')
+    end
 end
 Config.ndx=0;       % config index
 Config.nPoses=0;    % number of poses 

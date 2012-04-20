@@ -117,7 +117,7 @@ System.ndx=1:Config.PoseDim;
 
 % GRAPH
 Graph.F=[]; % keeps the factors
-Graph.idX=Data.vert(1,1); % the id in the variables in the graph
+Graph.idX=Config.IdPose1; % the id in the variables in the graph
 
 
 R0=chol(inv(Config.s0));

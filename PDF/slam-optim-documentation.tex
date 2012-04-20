@@ -55,7 +55,12 @@
 % Set double spacing for the text
 \doublespacing
 
+% Include dots between chapter name and page number
+\renewcommand{\cftchapdotsep}{\cftdotsep}
+%Finally, include the ToC
+\tableofcontents
 
+\newpage
 
 % Not enumerated chapter
 %-------------------------------------------------------------------------------
@@ -260,20 +265,16 @@ Levenberg-Marquard method:
 %--------------------------------------------------------------------
 \begin{Verbatim}[frame=single]
 Algorithm: Levenberg-Marquard
-
 factor=10;
 lambda=Solver.lambda;
 lambda_max=1e7;
 System_new=System;
-
 current_error=10000000;
-
 i=0;
 done=0;
 while ~done
     i=i+1;
     [S,v]=prepareSystem(System_new.A,System_new.b,lambda);
-    %dm=spqr_solve(S,v);
     dm=S\v;
     if ((norm(dm)<Solver.tol)||(i>=Solver.maxIT))
         done=1;
@@ -295,7 +296,6 @@ while ~done
             lambda=lambda*factor;
         end
     end
-    
 end
 \end{Verbatim}   
 \begin{Verbatim}[frame=single]
@@ -309,17 +309,13 @@ end
 \end{Verbatim}    
 %--------------------------------------------------------------------
 
-
-
-
 % Last pages for ToC
 %-------------------------------------------------------------------------------
 \newpage
-% Include dots between chapter name and page number
-\renewcommand{\cftchapdotsep}{\cftdotsep}
-%Finally, include the ToC
-\tableofcontents
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{IEEEtran}
+\bibliography{references/refs_gatech,references/gps,references/refs_add}
 
 
 

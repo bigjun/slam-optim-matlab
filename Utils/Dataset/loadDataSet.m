@@ -32,6 +32,8 @@ switch dataSet
         dataFileGraph = [dataPath,'/R3_2D.graph'];
     case 'R3_3D'
         dataFileGraph = [dataPath,'/R3_3D.graph'];
+    case 'beijing'
+        dataFileGraph = [dataPath,'/beijing.graph'];
     otherwise
         error('%s Dataset does not exist!',dataSet);
 end
@@ -51,6 +53,15 @@ else
     disp('Loading ed, ver from .GRAPH file ...')
     [vertices, edges]=loadFromFile(dataFileGraph);
 end
+% if strcmp(dataSet,'beijing')
+%     % reset IDs
+%     minv=min(vertices(:,1));
+%     vertices(:,1)=vertices(:,1)-minv;
+%     edges(:,1:2)=edges(:,1:2)-minv;
+%     % Incremental feed for edges
+%     vertices=sortrows(vertices,1);
+%     edges=sortrows(edges,[1,-2]);
+% end
 
 %save data to a mat file
 if saveFile
