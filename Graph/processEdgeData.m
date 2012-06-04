@@ -112,8 +112,13 @@ switch factorR.dof
         factorR.Sz=diag([1/dataEd(6);1/dataEd(8)]); % only diag cov.
         factorR.R=chol(inv(factorR.Sz)); %S^(-1/2)
     case 3
+        if dataEd(8)
         factorR.Sz=diag([1/dataEd(6);1/dataEd(8);1/dataEd(9)]); % only diag cov.
         factorR.R=chol(inv(factorR.Sz)); %S^(-1/2)
+        else
+            factorR.Sz=diag([1/dataEd(6);1/dataEd(9);1/dataEd(11)]); % only diag cov.
+            factorR.R=chol(inv(factorR.Sz)); %S^(-1/2)
+        end
     case 6
         U = dataEd(end-20:end);
         factorR.Sz=inv(getCovFromData(U, 6)); %TODO check if this is correct

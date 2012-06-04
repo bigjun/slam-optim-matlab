@@ -22,15 +22,32 @@ else
 end
 
 nv = size(vertices,1);
-if (maxID==0) || (maxID>nv)
-    maxID = nv;
+
+if nv
+    if (maxID==0) || (maxID>nv)
+        maxID = nv;
+    end
+    verticesIds=vertices(:,1);
+else
+    verticesIds=reshape(edges(:,1:2), size(edges,1)*2,1); % TODO extend the universal parser to 3D
+    verticesIds=unique(verticesIds);
+    %nv=size(verticesIds,1);
 end
 
-[srtVert,order] = sort(vertices(1:maxID),'ascend');
-goodIndices = ismember(edges(:,1),srtVert)&ismember(edges(:,2),srtVert); % +1 needed because old labels start at 0
-ed = edges(goodIndices,:);
-vert=vertices(order,:);
 
+% [srtVert,order] = sort(vertices(1:maxID),'ascend');
+% goodIndices = ismember(edges(:,1),srtVert)&ismember(edges(:,2),srtVert); % +1 needed because old labels start at 0
+
+[srtVert,order] = sort(verticesIds(1:maxID),'ascend');
+goodIndices = ismember(edges(:,1),srtVert)&ismember(edges(:,2),srtVert); % +1 needed because old labels start at 0
+
+ed = edges(goodIndices,:);
+
+if nv
+    vert=vertices(order,:);
+else
+    vert=[verticesIds,zeros(size(verticesIds,1),3)]; % TODO extend the universal parser to 3D
+end
 % %map to new labels
 % 
 % maxLabel = srtVert(maxID); %

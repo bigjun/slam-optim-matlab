@@ -4,10 +4,12 @@ function testData
 % dataSet='rosace2D';
 % dataSet='rosace3D';
 
-dataSet='10K';
+%dataSet='beijing';
+%dataSet='10K';
+dataSet='manhattan_g2o';
 pathData='./Data';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=0; % steps to process, if '0', the whole data is processed 
+maxID=300; % steps to process, if '0', the whole data is processed 
 
 Data=getDataFromFile(dataSet,pathData,saveFile,maxID);
 Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
@@ -37,7 +39,7 @@ Plot.fname=sprintf('%s_',Data.name);
 Config=initConfig(Data);
 
 % GRAPH
-Graph.F=[]; % keeps the factors
+Graph.F=[]; % keeps the factorspoints(1:3,:)
 Graph.idX=Data.vert(1,1); % the id in the variables in the graph
 
 %[Config]=composePosesOdometry(Data,Config);
@@ -50,4 +52,4 @@ while ind<=Data.nEd
     ind=ind+1;
     
 end
-PlotConfig(Plot,Config,Graph,'r','b');
+PlotConfig(Plot,Config,Graph,'b','b');

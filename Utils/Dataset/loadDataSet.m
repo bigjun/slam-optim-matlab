@@ -34,6 +34,10 @@ switch dataSet
         dataFileGraph = [dataPath,'/R3_3D.graph'];
     case 'beijing'
         dataFileGraph = [dataPath,'/beijing.graph'];
+    case 'city10000_g2o'
+        dataFileGraph = [dataPath,'/g2o/city10000_g2o.graph'];
+    case 'manhattan_g2o'
+        dataFileGraph = [dataPath,'/g2o/manhattanOlson3500_g2o.graph'];
     otherwise
         error('%s Dataset does not exist!',dataSet);
 end
@@ -43,7 +47,6 @@ dataFileMat=cat(2,dataFileGraph(1:end-6),'.mat');
 %make sure that there are no other variables called vertices, edges
 clear vertices;
 clear edges;
-
 
 % read the file
 if exist(dataFileMat,'file')    

@@ -36,7 +36,7 @@ switch nargin
         maxID=varargin{3};% steps to process, if '0', the whole data is processed 
 end
 
-incremental=0;% Incremental or batch
+incremental=1;% Incremental or batch
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
 obsType='rb'; % range and bearing %TODO automaticaly detect obsType
 

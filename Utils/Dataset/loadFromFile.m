@@ -13,7 +13,7 @@ fclose(fid);
 
 n = size(lines,1); % nombre de liniesma
 vert_strings = {'VERTEX','VERTEX2','VERTEX3'};
-edge_strings = {'EDGE','EDGE2','EDGE3','ODOMETRY','LANDMARK'};
+edge_strings = {'EDGE','EDGE2','EDGE3','ODOMETRY','LANDMARK','EDGE_SE2'};
 
 vertex_cell = cell(n,1);
 edge_cell = cell(n,1);
