@@ -10,9 +10,9 @@ function Result=testAddFactorPose
 
 close all;
 
-dataSet='10K';
+dataSet='intel';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=100; % steps to process, if '0', the whole data is processed 
+maxID=400; % steps to process, if '0', the whole data is processed 
 
 pathToolbox='~/LAAS/matlab/slam-optim-matlab/Data'; %TODO automaticaly get the toolbox path
 Data=getDataFromFile(dataSet,pathToolbox,saveFile,maxID);
@@ -47,25 +47,27 @@ while ind<=Data.nEd
     
 end
 clear ConfigJ GraphJ
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-ConfigH=initConfig(Data);
-GraphH=Graph;
-SystemH.type='Hessian';
-SystemH.ndx=1:ConfigH.PoseDim;
-SystemH.Lambda(SystemH.ndx,SystemH.ndx)=sparse(inv(ConfigH.s0 ));
-SystemH.eta(SystemH.ndx,1)=zeros(ConfigH.PoseDim,1);
-
-ind=1;
-while ind<=Data.nEd
-    factorR=processEdgeData(Data.ed(ind,:),Data.obsType,GraphH.idX);
-    ConfigH=addVariableConfig(factorR,ConfigH);
-    SystemH=addFactor(factorR,ConfigH, SystemH);
-    GraphH=addVarLinkToGraph(factorR,GraphH);
-    ind=ind+1;
-    
-end
-clear ConfigH GraphH
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+save SystemJ.mat SystemJ
+disp('Done with J')
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ConfigH=initConfig(Data);
+% GraphH=Graph;
+% SystemH.type='Hessian';
+% SystemH.ndx=1:ConfigH.PoseDim;
+% SystemH.Lambda(SystemH.ndx,SystemH.ndx)=sparse(inv(ConfigH.s0 ));
+% SystemH.eta(SystemH.ndx,1)=zeros(ConfigH.PoseDim,1);
+% 
+% ind=1;
+% while ind<=Data.nEd
+%     factorR=processEdgeData(Data.ed(ind,:),Data.obsType,GraphH.idX);
+%     ConfigH=addVariableConfig(factorR,ConfigH);
+%     SystemH=addFactor(factorR,ConfigH, SystemH);
+%     GraphH=addVarLinkToGraph(factorR,GraphH);
+%     ind=ind+1;
+%     
+% end
+% clear ConfigH GraphH
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 ConfigL=initConfig(Data);
 GraphL=Graph;
@@ -84,11 +86,13 @@ while ind<=Data.nEd
     ind=ind+1;
 end
 clear ConfigL GraphL
+save SystemL.mat SystemL
+disp('Done with L')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-testLambda=norm(full(SystemJ.A'*SystemJ.A-SystemH.Lambda))
-
-testEta=norm(full(SystemJ.A'*SystemJ.b-SystemH.eta))
+% testLambda=norm(full(SystemJ.A'*SystemJ.A-SystemH.Lambda))
+% 
+% testEta=norm(full(SystemJ.A'*SystemJ.b-SystemH.eta))
 
 
 testL=norm(full(SystemJ.A'*SystemJ.A-SystemL.L*SystemL.L'))

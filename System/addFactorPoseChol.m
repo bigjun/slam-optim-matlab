@@ -42,6 +42,7 @@ h=Absolute2Relative(p1,p2); % Expectation
 
 % update L
 ck=cputime;
+%L21 = System.L(ndx1(1):ndx2(end),1:ndx1(1)-1) ;
 L22 = System.L(ndx1(1):ndx2(end),ndx1(1):ndx2(end)) ;
 L22_new=(chol(L22*L22'+Omega))';
 System.L(ndx1(1):ndx2(end),ndx1(1):ndx2(end))  = L22_new;
@@ -53,6 +54,7 @@ end
 
 ck=cputime;
 
+d1 = System.d(1:ndx1(1)-1,1);
 d2 = System.d(ndx1(1):ndx2(end),1);
 dz=z-h;
 dz(end)=pi2pi(dz(end));

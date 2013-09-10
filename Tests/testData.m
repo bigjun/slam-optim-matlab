@@ -4,12 +4,12 @@ function testData
 % dataSet='rosace2D';
 % dataSet='rosace3D';
 
-%dataSet='beijing';
+dataSet='beijing';
 %dataSet='10K';
-dataSet='manhattan_g2o';
+%dataSet='manhattan_g2o';
 pathData='./Data';
 saveFile=1; % save edges and vertices to a .mat file to speed up the reading when used again.
-maxID=300; % steps to process, if '0', the whole data is processed 
+maxID=200; % steps to process, if '0', the whole data is processed 
 
 Data=getDataFromFile(dataSet,pathData,saveFile,maxID);
 Data.obsType='rb'; % range and bearing %TODO automaticaly detect obsType
@@ -52,4 +52,4 @@ while ind<=Data.nEd
     ind=ind+1;
     
 end
-PlotConfig(Plot,Config,Graph,'b','b');
+PlotConfig(Plot,Config,Graph,'g','g');
