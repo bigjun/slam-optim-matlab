@@ -1,0 +1,69 @@
+function [H1 H2]=Absolute2RelativeJacobian3D(p1,p2)
+
+% Jacobian of the relative displacement between two poses.
+eps_ = sqrt(eps);
+eps_2 = 0.5 * eps_;
+dof=length(p1);
+Eps=eye(dof)*eps_2;
+H1=zeros(dof,dof);
+
+
+d = Absolute2Relative3D(p1,p2);
+
+for j=1:dof
+    d1=Absolute2Relative3D(p1+Eps(:,j),p2);
+    H1(:,j)= (d1-d)/(Eps(:,j));
+    
+end 
+
+
+
+% computes the Jacobian numericaly
+% for each dependent random variable
+for rv=1:length(rvhandles)
+    nstart = obj.x_stacked_idx(rvhandles{rv});
+    rv_dof = length(rvs{rv});
+    for j=1:rv_dof
+        ej = e(1:rv_dof,j);
+        %x1 = x + ((-eps_2) * ej);
+        %x2 = x + (eps_2 * ej);
+        %J(:,j) = (obj.f(x2) - obj.f(x1)) / eps_;
+        
+        rvs2 = {rvs{:}};
+        rvs2{rv} = rvs{rv} + eps_ * ej;
+        
+        if fixed_sigma
+            z2_ = f(rvs2{:}, userdata{:});
+            rk2 = mtk.normalize_innovation(z2_ - z, m{5}, fixed_sigma);
+        else
+            [z2_ sigma2] = f(rvs2{:}, userdata{:});
+            rk2 = mtk.normalize_innovation(z2_ - z, sigma2);
+        end
+        
+        d = (rk2 - rk) / eps_;
+        
+        % NOTE: Given the spconvert call below, the following is the equivalent of
+        %       J(i:i+dof-1, nstart+j-1) = d;
+        
+        J_(q:q+dof-1,:) = [(i:i+dof-1)', (nstart+j-1) * ones(dof,1), d];
+        
+        q = q + dof;
+    end
+end
+
+
+dx=(p2(1)-p1(1));
+dy=(p2(2)-p1(2));
+
+c1=cos(p1(3));
+s1=sin(p1(3));
+
+H1=[[-c1 -s1 -s1*dx+c1*dy ];
+    [ s1 -c1 -c1*dx-s1*dy ];
+    [  0   0    -1        ]];
+
+H2=[[ c1  s1 0];
+    [-s1  c1 0];
+    [  0   0 1]];
+
+%H2=eye(3); % gtsam implementation
