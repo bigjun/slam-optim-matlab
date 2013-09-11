@@ -25,33 +25,35 @@ qe = a2qSyms(er);
 %%
 % (v + e) - u 
 
-vep = quat2matrix(qv) * (vp + ep);
+%vep = quat2matrix(qv) * (vp + ep); % unused? why?
 qve = quatmultiply(qv', qe')';
 quc = quatconj(qu')';
 % calculate ve - u 
  
 dvr = quatmultiply(quc', qve')';
-dvp = quat2matrix(quc) * (vep - up);
+%dvp = quat2matrix(quc) * (vep - up);
+dvp = quat2matrix(quc) * ((vp + ep) - up);
 
 dv = [dvp; q2aSyms(dvr)];
 
-Jv = jacobian(dv,e);
+Jv = jacobian(dv, e);
 
 %%
 % v - (u + e)  
 
-uep = quat2matrix(qu) * (up + ep);
+%uep = quat2matrix(qu) * (up + ep); % unused? why?
 que = quatmultiply(qu', qe')';
 quec = quatconj(que')';
 
 %  v - ue
 
-dur = quatmultiply(quec', qve')';
-dup = quat2matrix(quec) * (vep - uep);
+dur = quatmultiply(quec', qv')';
+%dup = quat2matrix(quec) * (vp - uep);
+dup = quat2matrix(quec) * (vp - (up + ep));
 
 du = [dup; q2aSyms(dur)];
 
-Ju = jacobian(du,e);
+Ju = jacobian(du, e);
 
 %%
 
@@ -76,6 +78,7 @@ dv_num = eval(subs(dv,{ux, uy, uz, ua, ub, uc, vx, vy, vz, va, vb, vc, ex, ey, e
 Ju_eval = eval(subs(Ju,{ux, uy, uz, ua, ub, uc, vx, vy, vz, va, vb, vc, ex, ey, ez, ea, eb, ec}, {uR(1),uR(2),uR(3),uR(4),uR(5),uR(6),vR(1),vR(2),vR(3),vR(4),vR(5),vR(6), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15)}));
 
 du_num = eval(subs(du,{ux, uy, uz, ua, ub, uc, vx, vy, vz, va, vb, vc, ex, ey, ez, ea, eb, ec}, {uR(1),uR(2),uR(3),uR(4),uR(5),uR(6),vR(1),vR(2),vR(3),vR(4),vR(5),vR(6), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15)}));
+%quec_num = eval(subs(quec,{ux, uy, uz, ua, ub, uc, vx, vy, vz, va, vb, vc, ex, ey, ez, ea, eb, ec}, {uR(1),uR(2),uR(3),uR(4),uR(5),uR(6),vR(1),vR(2),vR(3),vR(4),vR(5),vR(6), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15)}))
 
 %%
 % diffs

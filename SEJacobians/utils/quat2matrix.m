@@ -3,27 +3,30 @@
 % Q = body orientation in quaternion <scalar, vector> form,  double 4-by-1
 % R = matrix that represents the body frame in the world frame,  double 3-by-3
 function R = quat2matrix(Q)
-  q1 = Q(1);
-  q2 = Q(2);
-  q3 = Q(3);
-  q4 = Q(4);
-
-  q11 = q1*q1;
-  q22 = q2*q2;
-  q33 = q3*q3;
-  q44 = q4*q4;
-
-  q12 = q1*q2;
-  q23 = q2*q3;
-  q34 = q3*q4;
-  q14 = q1*q4;
-  q13 = q1*q3;
-  q24 = q2*q4;
-
-  R = [q11+q22-q33-q44  2*(q23+q14)      2*(q24-q13);
-       2*(q23-q14)      q11-q22+q33-q44  2*(q34+q12);
-       2*(q24+q13)      2*(q34-q12)      q11-q22-q33+q44];
-   
+    R = q2R([Q(2:4); Q(1)])
+    % this works perfectly, but has different quaternion convention (x y z w)
+    
+%   q1 = Q(1);
+%   q2 = Q(2);
+%   q3 = Q(3);
+%   q4 = Q(4);
+% 
+%   q11 = q1*q1;
+%   q22 = q2*q2;
+%   q33 = q3*q3;
+%   q44 = q4*q4;
+% 
+%   q12 = q1*q2;
+%   q23 = q2*q3;
+%   q34 = q3*q4;
+%   q14 = q1*q4;
+%   q13 = q1*q3;
+%   q24 = q2*q4;
+% 
+%   R = [q11+q22-q33-q44  2*(q23+q14)      2*(q24-q13);
+%        2*(q23-q14)      q11-q22+q33-q44  2*(q34+q12);
+%        2*(q24+q13)      2*(q34-q12)      q11-q22-q33+q44];
+%    
    
 %   R = zeros(3, 3);
 % 
