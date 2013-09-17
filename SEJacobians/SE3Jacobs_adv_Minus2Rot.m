@@ -25,30 +25,24 @@ Rv = RotMat(vr);
 Re = RotMat(er);
 
 Tu = [Ru up; 0 0 0 1];
+%Tv = [Rv vp + ep; 0 0 0 1];
+%Te = [Re [0 0 0]'; 0 0 0 1];
 Tv = [Rv vp; 0 0 0 1];
 Te = [Re ep; 0 0 0 1];
-
-
 Tdv = inv(Tu) * ( Tv * Te );
 
-
+%%
 dvr = ArotMat(Tdv(1,1), Tdv(1,2), Tdv(1,3), Tdv(2,1), Tdv(2,2), Tdv(2,3), Tdv(3,1), Tdv(3,2), Tdv(3,3));
 dvp = [Tdv(1,4), Tdv(2,4), Tdv(3,4)];
 dv = [dvp dvr'];
 
 Jv = jacobian(dv,e);
-% uR = [ 0.341895;  -0.041700;  0.033039;  -0.003792;  0.007925;  0.180211];
-% vR = [ 0.541643;  0.135006;  -0.067787;  -0.007457;  0.024664;  0.291557];
-% H1_gt = [ -0.983775 -0.179220 0.008222 0.000000 0.098524 0.138346;  0.179250 -0.983799 0.003059 -0.098524 0.000000 -0.229005;  -0.007541 -0.004484 -0.999962 -0.138346 0.229005 0.000000;  0.000000 0.000000 0.000000 -0.998943 -0.055681 0.008411;  -0.000000 -0.000000 -0.000000 0.055688 -0.998966 0.001141;  -0.000000 -0.000000 -0.000000 -0.008363 -0.001453 -0.999976]; % the first jacobian
-% H2_gt = [ 0.983775 0.179220 -0.008222 0.000000 0.000000 0.000000;  -0.179250 0.983799 -0.003059 0.000000 0.000000 0.000000;  0.007541 0.004484 0.999962 0.000000 0.000000 0.000000;  0.000000 0.000000 0.000000 0.998943 -0.055688 0.008363;  -0.000000 -0.000000 -0.000000 0.055681 0.998966 0.001453;  0.000000 0.000000 0.000000 -0.008411 -0.001141 0.999976]; 
-% 
-% 
-% Ru=rot(uR(4:6));
-% Rv=rot(vR(4:6));
-% tu = uR(1:3);
-% tv = vR(1:3);
-% 
-% Jv = eval(subs(Jv,{ux, uy, uz, ua, ub, uc, vx, vy, vz, va, vb, vc, ex, ey, ez, ea, eb, ec}, {uR(1),uR(2),uR(3),uR(4),uR(5),uR(6),vR(1),vR(2),vR(3),vR(4),vR(5),vR(6), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15)})); 
+
+% clear Tu Tv Te
+% syms  Tu Tv Te Tdu dur dup du real
+% Tu = [Ru up + ep; 0 0 0 1];
+% Tv = [Rv vp; 0 0 0 1];
+% Te = [Re [0 0 0]'; 0 0 0 1];
 
 Tdu = inv(Tu* Te)* Tv ;
 
@@ -56,27 +50,61 @@ dur = ArotMat(Tdu(1,1), Tdu(1,2), Tdu(1,3), Tdu(2,1), Tdu(2,2), Tdu(2,3), Tdu(3,
 dup = [Tdu(1,4), Tdu(2,4), Tdu(3,4)];
 du = [dup dur'];
 
-Ju11 = jacobian(dup,ep);
-Ju12 = jacobian(dup,er);
-Ju21 = jacobian(dur,ep);
-Ju22 = jacobian(dur,er);
+% Ju11 = jacobian(dup,ep);
+% Ju12 = jacobian(dup,er);
+% Ju21 = jacobian(dur,ep);
+% Ju22 = jacobian(dur,er);
 
-Ju = [Ju11 Ju12; Ju21 Ju22];
+% Ju = [Ju11 Ju12; Ju21 Ju22];
+%%
+% ground truth
+% bug in the smart plus
+% uR = [ 0.341895;  -0.041700;  0.033039;  -0.003792;  0.007925;  0.180211];
+% vR = [ 0.541643;  0.135006;  -0.067787;  -0.007457;  0.024664;  0.291557];
+% H1_gt = [ -0.983775 -0.179220 0.008222 0.000000 0.098524 0.138346;  0.179250 -0.983799 0.003059 -0.098524 0.000000 -0.229005;  -0.007541 -0.004484 -0.999962 -0.138346 0.229005 0.000000;  0.000000 0.000000 0.000000 -0.998943 -0.055681 0.008411;  -0.000000 -0.000000 -0.000000 0.055688 -0.998966 0.001141;  -0.000000 -0.000000 -0.000000 -0.008363 -0.001453 -0.999976]; % the first jacobian
+% H2_gt = [ 0.983775 0.179220 -0.008222 0.000000 0.000000 0.000000;  -0.179250 0.983799 -0.003059 0.000000 0.000000 0.000000;  0.007541 0.004484 0.999962 0.000000 0.000000 0.000000;  0.000000 0.000000 0.000000 0.998943 -0.055688 0.008363;  -0.000000 -0.000000 -0.000000 0.055681 0.998966 0.001453;  0.000000 0.000000 0.000000 -0.008411 -0.001141 0.999976];
+% d_gt = [ 0.229005;  0.138346;  -0.098524;  -0.002594;  0.016774;  0.111368]
 
-ccu = ccode(Ju);
-ccv = ccode(Jv);
 
-ccu = strrep(strrep(ccu, '~', sprintf('\n')), ';', sprintf(';\n')); % make newlines
-ccu = strrep(ccu, '`codegen/C/expression:`, `Unknown function:`, conj, `will be left as is.`', '');
-%ccu = strrep(ccu, 'conjugate', '');
-ccv = strrep(strrep(ccv, '~', sprintf('\n')), ';', sprintf(';\n')); % make newlines
-ccv = strrep(ccv, '`codegen/C/expression:`, `Unknown function:`, conj, `will be left as is.`', '');
-%ccv = strrep(ccv, 'conjugate', '');
+uR = [ 0.341895;  -0.041700;  0.033039;  -0.003792;  0.007925;  0.180211];
+vR = [ 0.541643;  0.135006;  -0.067787;  -0.007457;  0.024664;  0.291557];
+d_gt = [ 0.229005;  0.138346;  -0.098524;  -0.002594;  0.016774;  0.111368]; % difference between u and v
+H1_gt = [ -1.000000 -0.000000 0.000000 0.000000 0.098524 0.138346;  0.000000 -1.000000 0.000000 -0.098524 0.000000 -0.229005;  0.000000 0.000000 -1.000000 -0.138346 0.229005 0.000000;  0.000000 0.000000 0.000000 -0.998943 -0.055681 0.008411;  -0.000000 -0.000000 -0.000000 0.055688 -0.998966 0.001141;  -0.000000 -0.000000 -0.000000 -0.008363 -0.001453 -0.999976]; % the first jacobian
+H2_gt = [ 0.993665 -0.111155 0.016594 0.000000 0.000000 0.000000;  0.111111 0.993802 0.003521 0.000000 0.000000 0.000000;  -0.016883 -0.001655 0.999856 0.000000 0.000000 0.000000;  0.000000 0.000000 0.000000 0.998943 -0.055688 0.008363;  -0.000000 -0.000000 -0.000000 0.055681 0.998966 0.001453;  0.000000 0.000000 0.000000 -0.008411 -0.001141 0.999976]; % the second jacobian
 
-fid = fopen('MyJacobsU_minus2.h','w')
-fwrite(fid, ccu, 'uchar');
-fclose(fid)
-fid = fopen('MyJacobsV_minus2.h','w')
-fwrite(fid, ccv, 'uchar');
-fclose(fid)
+
+Ru=rot(uR(4:6));
+Rv=rot(vR(4:6));
+tu = uR(1:3);
+tv = vR(1:3);
+%%
+% evaluations
+dv_num = eval(subs(dv,{ux, uy, uz, ua, ub, uc, vx, vy, vz, va, vb, vc, ex, ey, ez, ea, eb, ec}, {uR(1),uR(2),uR(3),uR(4),uR(5),uR(6),vR(1),vR(2),vR(3),vR(4),vR(5),vR(6), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15)}));
+du_num = eval(subs(du,{ux, uy, uz, ua, ub, uc, vx, vy, vz, va, vb, vc, ex, ey, ez, ea, eb, ec}, {uR(1),uR(2),uR(3),uR(4),uR(5),uR(6),vR(1),vR(2),vR(3),vR(4),vR(5),vR(6), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15)}));
+Jv_eval = eval(subs(Jv,{ux, uy, uz, ua, ub, uc, vx, vy, vz, va, vb, vc, ex, ey, ez, ea, eb, ec}, {uR(1),uR(2),uR(3),uR(4),uR(5),uR(6),vR(1),vR(2),vR(3),vR(4),vR(5),vR(6), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15), 10^(-15)}));
+
+%%
+% diffs
+dv_diff = dv_num' - d_gt
+du_diff = du_num' - d_gt
+dudv_diff = dv_num' - du_num' 
+Jv_eval - H2_gt
+
+% 
+% ccu = ccode(Ju);
+% ccv = ccode(Jv);
+% 
+% ccu = strrep(strrep(ccu, '~', sprintf('\n')), ';', sprintf(';\n')); % make newlines
+% ccu = strrep(ccu, '`codegen/C/expression:`, `Unknown function:`, conj, `will be left as is.`', '');
+% %ccu = strrep(ccu, 'conjugate', '');
+% ccv = strrep(strrep(ccv, '~', sprintf('\n')), ';', sprintf(';\n')); % make newlines
+% ccv = strrep(ccv, '`codegen/C/expression:`, `Unknown function:`, conj, `will be left as is.`', '');
+% %ccv = strrep(ccv, 'conjugate', '');
+% 
+% fid = fopen('MyJacobsU_minus2.h','w')
+% fwrite(fid, ccu, 'uchar');
+% fclose(fid)
+% fid = fopen('MyJacobsV_minus2.h','w')
+% fwrite(fid, ccv, 'uchar');
+% fclose(fid)
 

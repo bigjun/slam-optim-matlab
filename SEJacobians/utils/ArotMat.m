@@ -11,15 +11,15 @@ if nargin==1
      rd32=varargin{1}(3,2);
      rd33=varargin{1}(3,3);
 else
-    rd11=varargin(1);
-     rd12=varargin(2);
-     rd13=varargin(3);
-     rd21=varargin(4);
-     rd22=varargin(5);
-     rd23=varargin(6);
-     rd31=varargin(7);
-     rd32=varargin(8);
-     rd33=varargin(9);
+    rd11=varargin{1};
+     rd12=varargin{2};
+     rd13=varargin{3};
+     rd21=varargin{4};
+     rd22=varargin{5};
+     rd23=varargin{6};
+     rd31=varargin{7};
+     rd32=varargin{8};
+     rd33=varargin{9};
 end
     
 tr = rd11 + rd22 + rd33;
