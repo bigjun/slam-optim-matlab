@@ -19,7 +19,7 @@ eT = [eR, ep];
 % vR = RotMat(va);
 % % end axis angle space
 
-vep = vp + vR * ep;
+vep = vp + vR * ep;  %TODO replace by R2AMatrix
 veR = vR * eR;
 
 veT = [veR, vep];

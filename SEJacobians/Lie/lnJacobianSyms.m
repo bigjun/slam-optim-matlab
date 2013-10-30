@@ -1,11 +1,14 @@
-function JLn=lnJacobianSyms(rd11, rd12, rd13, rd21, rd22, rd23, rd31, rd32, rd33)
+function JLn=lnJacobianSyms(Td)
 
 %syms rd11  rd12  rd13  rd21  rd22  rd23  rd31  rd32 rd33 real
-
+% only rotation
 %Rd=[rd11 rd12 rd13; rd21 rd22 rd23; rd31 rd32 rd33];
+% Rd = Td(1:3,1:3);
+% td = Td(4,1:3);
+% Ln=ArotMat(Rd);
+Ln = LogSE3(Td);
+JLn=jacobian( Ln,reshape(Td,1,12));
 
-Ln=ArotMat(rd11, rd12, rd13, rd21, rd22, rd23, rd31, rd32, rd33)
-JLn=jacobian(Ln, [rd11 rd12 rd13 rd21 rd22 rd23 rd31 rd32 rd33]);
 
 
 % syms theta costh real
