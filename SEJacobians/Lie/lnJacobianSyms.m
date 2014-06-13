@@ -7,9 +7,21 @@ function JLn=lnJacobianSyms(Td)
 % td = Td(4,1:3);
 % Ln=ArotMat(Rd);
 Ln = LogSE3(Td);
-JLn=jacobian( Ln,reshape(Td,1,12));
+Lnt = Ln(1:3);
+Lnr = Ln(4:6);
 
+rr = reshape(Td(1:3,1:3),1,9); % this gives [rd11 rd21  rd31   rd12 rd22  rd32    rd13 rd23 rd33] !!!
+rt = reshape(Td(1:3,4),1,3);
 
+%JLnGT=jacobian(Ln,r);
+JLn11=jacobian(Lnt,rr);
+JLn12=jacobian(Lnt,rt);
+JLn21=jacobian(Lnr,rr);
+JLn22=jacobian(Lnr,rt);
+JLn = [JLn11,JLn12;JLn21,JLn22];
+%JLn =JLn21  
+
+% JLn-JLnGT
 
 % syms theta costh real
 % 

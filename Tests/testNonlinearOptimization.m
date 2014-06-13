@@ -82,8 +82,8 @@ end
 Solver.maxIT=100;
 Solver.tol=1e-4;
 Solver.linearSolver='spqr';
-Solver.nonlinearSolver='GaussNewton';
-%Solver.nonlinearSolver='LevenbergMarquardt';
+%Solver.nonlinearSolver='GaussNewton';
+Solver.nonlinearSolver='LevenbergMarquardt';
 Solver.lambda=10;
 Solver.linearTime=0;
 Solver.linearizationTime=0;

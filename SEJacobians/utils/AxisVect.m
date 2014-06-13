@@ -1,5 +1,5 @@
-function [ a1, a2, a3, b]= AxisVect(r11, r12, r13, r21, r22, r23, r31, r32, r33)
-R = [r11 r12 r13; r21 r22 r23; r31 r32 r33]; 
+function [ a1, a2, a3, b]= AxisVect(R)
+%R = [r11 r12 r13; r21 r22 r23; r31 r32 r33]; 
 cd = (trace(R)-1)/2;
 sd = sqrt(1 - cd^2);
 angle = acos(cd);

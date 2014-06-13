@@ -6,7 +6,7 @@ ps1.Q=rot(p1(4:6));
 ds.pose=d(1:3); % TODO This must depend on factorR.
 ds.Q=rot(d(4:6));
 
-ps2.pose = ps1.pose + ds.pose;
+ps2.pose = ps1.pose + ps1.Q * ds.pose;
 ps2.q = arot(ps1.Q *ds.Q); 
 p2=[ps2.pose;ps2.q];
 

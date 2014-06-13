@@ -29,7 +29,7 @@ disp('                                                 ENJOY!!');
 disp(' ');
 disp('                                          Author: Viorela Ila');
 
-SuiteSparsePath_ela='~/Work_mac/code/SuiteSparse';
+SuiteSparsePath_ela='~/LAAS/matlab/slam-optim-matlab/SuiteSparse';
 SuiteSparsePath_others='~/SuiteSparse';
 
 if exist(SuiteSparsePath_ela,'dir') 
