@@ -3,7 +3,7 @@
 %   
 clc;
 disp(' ');  
-disp('                                    MATLAB TOOLBOX FOR SE(3) JACOBIANS');
+disp('                               SYMBOLIC MATLAB TOOLBOX FOR SE(3) JACOBIANS');
 disp(' ');
 disp(' ');
 disp(' ');
