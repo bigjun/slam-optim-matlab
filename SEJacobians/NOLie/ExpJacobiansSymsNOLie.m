@@ -5,7 +5,7 @@ syms xe ye ze a1e a2e a3e real
 pe = [xe ye ze]';
 re = [a1e a2e a3e]';
 
-te = pe;
+te = pe;  %TODO is it correct?!!!!!
 Re=RotMat(re);
 
 Te = [Re te];
