@@ -67,7 +67,7 @@ for j = 2:nd
     colbcn =  coln(end);
     J(row,colbc) =   RBias;
     J(row,colbcn) = -  RBias;
-    d(row) = (poses(j,end)' -  poses(j-1,end)');
+    d(row) =  RBias * (poses(j,end)' -  poses(j-1,end)');
     
     % measurement model
     bcol = nd*dim+(1:dimb);%reset bcol
